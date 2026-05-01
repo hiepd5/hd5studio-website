@@ -19,13 +19,15 @@
 | Cấu trúc trang, sections | `.claude/rules/structure.md` |
 | Migration Next.js | `.claude/rules/nextjs.md` |
 
-## Sub-agents
+## Sub-agents & Slash Commands
 
-| Agent | Lệnh | Dùng khi |
-|---|---|---|
-| reviewer | `/reviewer` | Sau thay đổi lớn — chấm 8 tiêu chí UI/UX/code |
-| researcher | `/researcher [chủ đề]` | Tìm trend/kỹ thuật — tóm tắt, không dump vào context |
-| guide | `/guide [câu hỏi]` | Hỏi deploy, R2, Supabase, YouTube — hướng dẫn click-by-click |
+| Lệnh | Dùng khi |
+|---|---|
+| `/reviewer` | Sau thay đổi lớn — chấm 8 tiêu chí UI/UX/code |
+| `/researcher [chủ đề]` | Tìm trend/kỹ thuật — tóm tắt, không dump vào context |
+| `/guide [câu hỏi]` | Hỏi deploy, R2, Supabase, YouTube — hướng dẫn click-by-click |
+| `/add-project [slug]` | Thêm dự án mới — hỏi thông tin → xuất SQL + đường dẫn R2 |
+| `/deploy` | Nhắc quy trình git commit → push → Vercel deploy |
 
 ## Non-negotiable
 - Nền luôn dark `#080808` / `#0f0f0f` — không dùng nền sáng
@@ -51,36 +53,63 @@
 
 ---
 
-## Trạng thái hiện tại — 2026-04-30
+## Trạng thái hiện tại — 2026-05-02
 
-### ✅ Đã hoàn thành
+### ✅ Đã hoàn thành (session 1 — 2026-05-01)
 - `index.html` — landing page đầy đủ 11 sections
 - `api/portfolio.js` + `api/config.js` — Vercel proxy bảo mật
 - Portfolio dynamic từ Supabase + skeleton loading
-- Lightbox 4K + zoom/pan/slideshow
+- Lightbox 4K + zoom/pan/slideshow + touch swipe mobile
 - YouTube modal (lazy iframe)
-- Supabase schema: bảng `portfolio` + `site_config` ✅
-- Vercel env vars đã set ✅
-- 3 sub-agents: reviewer / researcher / guide ✅
-- Kế hoạch deploy chi tiết (lưu trong plan file)
+- Git repo → `github.com/hiepd5/hd5studio-website` ✅
+- Deploy Vercel + domain `hd5studio.com` live qua Namecheap A + CNAME ✅
+- Supabase schema: bảng `portfolio` + `site_config` + RLS policy ✅
+- R2 bucket `hd5-studio-assets` — public URL bật ✅
+- Dự án đầu tiên "Cảnh Quan Đô Thị Xanh" (`do-thi-xanh`) live ✅
+- Slash commands: `/add-project`, `/deploy`, `/guide` trong `.claude/commands/` ✅
+
+### ✅ Đã hoàn thành (session 2 — 2026-05-02)
+- **Slash commands hoạt động** — tạo và test `/add-project`, thêm 2 dự án mới:
+  - `cong-vien-1` — Công Viên Vui Chơi Trẻ Em (sort_order 2)
+  - `park-river-walk` — Tổ Hợp Cao Tầng Cao Cấp Park River Walk (sort_order 3, 7 ảnh)
+- **Fix bugs từ `/reviewer`** (điểm 61/80 → đã fix):
+  - Color contrast: 16 selector `var(--dim)` → `var(--muted)` (WCAG AA)
+  - `lbContainer` khai báo sai thứ tự gây crash swipe mobile
+  - `reel-play-btn` đổi `<div>` → `<button aria-label>`
+  - Trust ticker 2 bản đồng bộ (SUNSHINE GROUP)
+  - OG + Twitter meta tags đầy đủ
+- **Nâng cấp animations:**
+  - Lightbox swipe trượt ngang mượt (slide-out/slide-in CSS transition)
+  - Portfolio card parallax tilt 7deg theo chuột
+  - Hero stats counter đếm từ 0 khi vào viewport
+  - Scroll progress bar gold 2px ở top page
+  - Portfolio cards stagger wave đều (d0→d5)
+  - Navbar ẩn khi scroll xuống nhanh, hiện khi scroll lên
+- **Hero showreel** — xóa vùng đen trống (`justify-content: center`), load YouTube ID từ `site_config.showreel_video_id` tự động
 
 ### 🔲 Việc cần làm tiếp
 
-**[UNBLOCK — làm trước]**
-- [ ] Git init → push GitHub → import Vercel → deploy
-- [ ] Trỏ domain `hd5studio.com` về Vercel
-- [ ] Upload ảnh WebP lên R2 → nhập URLs vào Supabase
-- [ ] Paste YouTube showreel ID vào `site_config`
+**[UNBLOCK — data]**
+- [ ] Upload ảnh cho `cong-vien-1` và `park-river-walk` lên R2 → bật `active=true`
+- [ ] Paste YouTube showreel ID vào Supabase `site_config.showreel_video_id`
+- [ ] Thêm `video_id` cho các dự án khi có video
 
 **[HIGH]**
 - [ ] Testimonials — 3 quote thật (tên, chức vụ, công ty)
 - [ ] Footer — email, địa chỉ studio
 
 **[MEDIUM]**
-- [ ] SEO — OG image 1200×630, Twitter card, canonical
-- [ ] Favicon 32×32 + 192×192
+- [ ] Favicon 32×32 + 192×192 (OG meta tags đã có, chỉ còn favicon)
 
 **[PHASE 2]**
 - [ ] Next.js 14 migration
 - [ ] Trang `/portfolio` với filter
 - [ ] Form `/contact`
+
+### Quyết định quan trọng
+- **Supabase URL không có `/rest/v1/`** — SDK tự thêm path
+- **Slug R2 phải không dấu, gạch nối** — khoảng trắng gây 404
+- **service_role key** — luôn lấy dòng `eyJ...` trong Supabase Settings → API, không dùng publishable key
+- **Showreel ID trong Supabase** — `site_config.showreel_video_id`, thay trực tiếp trên Supabase không cần redeploy
+- **`var(--dim)=#444` không dùng cho text** — tương phản quá thấp (~2.7:1), chỉ dùng `var(--muted)=#888` trở lên
+- **Slash commands `/add-project`** — dùng để thêm dự án mới, xuất SQL + R2 path sẵn, không viết tay
