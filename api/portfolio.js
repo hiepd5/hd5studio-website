@@ -10,14 +10,6 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  if (req.url.includes('debug')) {
-    const key = process.env.SUPABASE_SERVICE_KEY || ''
-    return res.status(200).json({
-      key_length: key.length,
-      key_start: key.substring(0, 20),
-      key_end: key.substring(key.length - 10)
-    })
-  }
 
 
   const { data, error } = await supabase
@@ -27,7 +19,7 @@ module.exports = async function handler(req, res) {
     .order('sort_order', { ascending: true })
 
   if (error) {
-    return res.status(500).json({ error: error.message, code: error.code, details: error.details })
+    return res.status(500).json({ error: 'Failed to load portfolio' })
   }
 
   res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600')
