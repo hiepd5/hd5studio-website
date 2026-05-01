@@ -6,7 +6,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HD5 Studio — Diễn Họa Kiến Trúc Đỉnh Cao</title>
   <meta name="description"
-    content="Sáng tạo không giới hạn, Render không chờ đợi Thống trị mọi dự án với tư duy diễn họa D5 Render đỉnh cao." />
+    content="Sáng tạo không giới hạn, Render không chờ đợi. Thống trị mọi dự án với tư duy diễn họa D5 Render đỉnh cao." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="HD5 Studio — Diễn Họa Kiến Trúc Đỉnh Cao" />
+  <meta property="og:description" content="Sáng tạo không giới hạn, Render không chờ đợi. Diễn họa kiến trúc 4K chuyên nghiệp." />
+  <meta property="og:image" content="https://pub-51ede49b8dd446e48127b94ee7d22d71.r2.dev/portfolio/do-thi-xanh/thumb.webp" />
+  <meta property="og:url" content="https://hd5studio.com" />
+  <meta property="og:locale" content="vi_VN" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="HD5 Studio — Diễn Họa Kiến Trúc Đỉnh Cao" />
+  <meta name="twitter:description" content="Sáng tạo không giới hạn, Render không chờ đợi." />
+  <meta name="twitter:image" content="https://pub-51ede49b8dd446e48127b94ee7d22d71.r2.dev/portfolio/do-thi-xanh/thumb.webp" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -189,6 +199,18 @@
     /* ═══════════════════════════════════════
      NAVBAR
   ═══════════════════════════════════════ */
+    #scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--gold), #e0c07a);
+      z-index: 300;
+      pointer-events: none;
+      transition: width .1s linear;
+      box-shadow: 0 0 8px rgba(200,169,110,.35);
+    }
+
     #nav {
       position: fixed;
       top: 0;
@@ -197,8 +219,11 @@
       z-index: 200;
       padding: 18px 0;
       border-bottom: 1px solid transparent;
-      transition: padding .3s, background .3s, border-color .3s;
+      transform: translateY(0);
+      transition: padding .3s, background .3s, border-color .3s, transform .4s cubic-bezier(.25, 1, .5, 1);
     }
+
+    #nav.nav-hidden { transform: translateY(-110%); }
 
     #nav.scrolled {
       padding: 13px 0;
@@ -450,7 +475,7 @@
 
     .hs-label {
       font-size: 11.5px;
-      color: var(--dim);
+      color: var(--muted);
       margin-top: 4px;
       letter-spacing: .02em;
     }
@@ -552,6 +577,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      border: none;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+      text-align: left;
       z-index: 10;
     }
 
@@ -701,7 +731,7 @@
       font-weight: 600;
       letter-spacing: .12em;
       text-transform: uppercase;
-      color: var(--dim);
+      color: var(--muted);
       margin-bottom: 24px;
     }
 
@@ -754,7 +784,7 @@
       white-space: nowrap;
       font-size: 13px;
       font-weight: 500;
-      color: var(--dim);
+      color: var(--muted);
     }
 
     .ti-dot {
@@ -981,7 +1011,7 @@
 
     .fcard-bar-title {
       font-size: 11px;
-      color: var(--dim);
+      color: var(--muted);
       margin-left: 6px;
       font-family: 'JetBrains Mono', ui-monospace, monospace;
     }
@@ -1108,7 +1138,7 @@
 
     .qi-sub {
       font-size: 10.5px;
-      color: var(--dim);
+      color: var(--muted);
     }
 
     .qi-done {
@@ -1128,7 +1158,7 @@
     .qi-wait {
       font-size: 11px;
       font-weight: 600;
-      color: var(--dim);
+      color: var(--muted);
       flex-shrink: 0;
     }
 
@@ -1163,7 +1193,7 @@
 
     .ms-label {
       font-size: 10px;
-      color: var(--dim);
+      color: var(--muted);
       margin-top: 2px;
     }
 
@@ -1196,7 +1226,7 @@
 
     .kpi-label {
       font-size: 10.5px;
-      color: var(--dim);
+      color: var(--muted);
       margin-top: 2px;
     }
 
@@ -1215,9 +1245,12 @@
       border: 1px solid var(--border);
       background: #0c0c0c;
       cursor: pointer;
-      transition: border-color .25s, transform .25s, box-shadow .25s;
+      transition: border-color .25s, transform .3s cubic-bezier(.25,1,.5,1), box-shadow .25s;
       position: relative;
+      transform-style: preserve-3d;
+      perspective: 900px;
     }
+    @media (hover: none) { .port-item { transform-style: flat; } }
 
     .port-item:hover {
       border-color: var(--gold-bd);
@@ -1430,12 +1463,18 @@
     .lb-img-container.zoomed { cursor: grab; }
     .lb-img-container.dragging { cursor: grabbing; }
 
+    #lb-img.slide-out-left  { transform: translateX(-60px); opacity: 0; }
+    #lb-img.slide-out-right { transform: translateX(60px);  opacity: 0; }
+    #lb-img.slide-in-left   { transform: translateX(60px);  opacity: 0; }
+    #lb-img.slide-in-right  { transform: translateX(-60px); opacity: 0; }
+
     #lb-img {
       display: block;
       max-width: 92vw;
       max-height: 80vh;
       object-fit: contain;
-      transition: opacity .3s;
+      will-change: transform, opacity;
+      transition: opacity .3s, transform .32s cubic-bezier(.25, 1, .5, 1);
       transform-origin: center center;
       pointer-events: none;
       user-select: none;
@@ -1699,7 +1738,7 @@
 
     .proc-step p {
       font-size: 12.5px;
-      color: var(--dim);
+      color: var(--muted);
       line-height: 1.65;
     }
 
@@ -1770,7 +1809,7 @@
 
     .tcard-role {
       font-size: 11px;
-      color: var(--dim);
+      color: var(--muted);
     }
 
     /* ═══════════════════════════════════════
@@ -1879,7 +1918,7 @@
 
     .foot-desc {
       font-size: 13px;
-      color: var(--dim);
+      color: var(--muted);
       line-height: 1.7;
       margin-bottom: 18px;
       max-width: 260px;
@@ -1901,7 +1940,7 @@
       justify-content: center;
       font-size: 13px;
       text-decoration: none;
-      color: var(--dim);
+      color: var(--muted);
       transition: all .2s;
     }
 
@@ -1916,7 +1955,7 @@
       font-weight: 600;
       letter-spacing: .1em;
       text-transform: uppercase;
-      color: var(--dim);
+      color: var(--muted);
       margin-bottom: 14px;
     }
 
@@ -1949,7 +1988,7 @@
 
     .foot-copy {
       font-size: 11.5px;
-      color: var(--dim);
+      color: var(--muted);
     }
 
     .foot-copy span {
@@ -1958,7 +1997,7 @@
 
     .foot-right a {
       font-size: 11.5px;
-      color: var(--dim);
+      color: var(--muted);
       text-decoration: none;
       transition: color .2s;
     }
@@ -2117,6 +2156,7 @@
 </head>
 
 <body>
+  <div id="scroll-progress"></div>
 
   <!-- ══════════════════════════════
      NAVBAR
@@ -2402,7 +2442,7 @@
         </div>
 
         <!-- Play button -->
-        <div class="reel-play-btn">
+        <button class="reel-play-btn" aria-label="Xem showreel" type="button">
           <div class="reel-play-ring">
             <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
               <path d="M9 6.5L20 13L9 19.5V6.5Z" fill="#c8a96e" />
@@ -2429,23 +2469,24 @@
         </div>
 
       </div>
+      </button>
     </div>
 
     <div class="hero-stats rx d4">
       <div class="hs">
-        <div class="hs-num">200<sup>+</sup></div>
+        <div class="hs-num" data-target="200" data-suffix="+">0<sup>+</sup></div>
         <div class="hs-label">Dự án hoàn thành</div>
       </div>
       <div class="hs">
-        <div class="hs-num">50<sup>+</sup></div>
+        <div class="hs-num" data-target="50" data-suffix="+">0<sup>+</sup></div>
         <div class="hs-label">Khách hàng</div>
       </div>
       <div class="hs">
-        <div class="hs-num">48<sup>h</sup></div>
+        <div class="hs-num" data-target="48" data-suffix="h">0<sup>h</sup></div>
         <div class="hs-label">Giao hàng chuẩn</div>
       </div>
       <div class="hs">
-        <div class="hs-num">4K<sup>+</sup></div>
+        <div class="hs-num" data-target="4" data-suffix="K<sup>+</sup>">0<sup>+</sup></div>
         <div class="hs-label">Chất lượng render</div>
       </div>
     </div>
@@ -2470,7 +2511,7 @@
         <div class="ti"><span class="ti-dot"></span>Kiến trúc Hà Nội</div>
         <div class="ti"><span class="ti-dot"></span>Quy hoạch Đô thị</div>
         <div class="ti"><span class="ti-dot"></span>Vinhomes Projects</div>
-        <div class="ti"><span class="ti-dot"></span>Masterplan Studio</div>
+        <div class="ti"><span class="ti-dot"></span>SUNSHINE GROUP</div>
         <div class="ti"><span class="ti-dot"></span>Kientruc.vn</div>
         <div class="ti"><span class="ti-dot"></span>SunGroup Realty</div>
         <div class="ti"><span class="ti-dot"></span>ARC Design Lab</div>
@@ -2889,9 +2930,28 @@
   </footer>
 
   <script>
-    // Navbar scroll
-    const nav = document.getElementById('nav');
-    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 30), { passive: true });
+    // Navbar scroll + hide on fast scroll down + scroll progress
+    const nav = document.getElementById('nav')
+    const scrollProgressEl = document.getElementById('scroll-progress')
+    let lastScrollY = 0, scrollTicking = false
+    window.addEventListener('scroll', () => {
+      if (scrollTicking) return
+      scrollTicking = true
+      requestAnimationFrame(() => {
+        const y = scrollY
+        const delta = y - lastScrollY
+        if (delta > 8 && y > 100 && !mob.classList.contains('open')) {
+          nav.classList.add('nav-hidden')
+        } else if (delta < -4) {
+          nav.classList.remove('nav-hidden')
+        }
+        nav.classList.toggle('scrolled', y > 30)
+        const total = document.documentElement.scrollHeight - innerHeight
+        scrollProgressEl.style.width = (total > 0 ? (y / total) * 100 : 0) + '%'
+        lastScrollY = y
+        scrollTicking = false
+      })
+    }, { passive: true })
 
     // Hamburger
     const hbg = document.getElementById('hbg');
@@ -2935,7 +2995,7 @@
         return
       }
       grid.innerHTML = items.map((p, i) => {
-        const delay = i < 2 ? '' : i < 4 ? 'd1' : 'd2'
+        const delay = ['', 'd1', 'd2', 'd3', 'd4', 'd5'][Math.min(i, 5)]
         const fullUrls = (p.full_urls && p.full_urls.length) ? p.full_urls : (p.thumb_url ? [p.thumb_url] : [])
         const fullUrlsJson = JSON.stringify(fullUrls).replace(/"/g, '&quot;')
         const tags = (p.tags || []).map(t => `<span>${t}</span>`).join('')
@@ -2970,6 +3030,7 @@
 
       // Re-register scroll reveal cho cards mới
       grid.querySelectorAll('.rx').forEach(el => obs.observe(el))
+      initTilt()
 
       // Click ảnh → lightbox, click video → YouTube modal
       grid.querySelectorAll('.port-item').forEach(card => {
@@ -2991,6 +3052,47 @@
     }
 
     loadPortfolio()
+
+    // Hero stats counter
+    function animateCounter(el, target, suffix, duration) {
+      let start = null
+      const sup = el.querySelector('sup')
+      const step = ts => {
+        if (!start) start = ts
+        const p = Math.min((ts - start) / duration, 1)
+        const eased = p === 1 ? 1 : 1 - Math.pow(2, -10 * p)
+        el.innerHTML = Math.floor(eased * target) + '<sup>' + suffix + '</sup>'
+        if (p < 1) requestAnimationFrame(step)
+      }
+      requestAnimationFrame(step)
+    }
+    const counterObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return
+        counterObs.unobserve(e.target)
+        const el = e.target
+        animateCounter(el, +el.dataset.target, el.dataset.suffix, 1400)
+      })
+    }, { threshold: 0.6 })
+    document.querySelectorAll('.hs-num[data-target]').forEach(el => counterObs.observe(el))
+
+    // Portfolio card tilt
+    function initTilt() {
+      document.querySelectorAll('.port-item').forEach(card => {
+        let raf = null
+        card.addEventListener('mousemove', e => {
+          if (raf) return
+          raf = requestAnimationFrame(() => {
+            raf = null
+            const r = card.getBoundingClientRect()
+            const x = (e.clientX - r.left) / r.width - 0.5
+            const y = (e.clientY - r.top) / r.height - 0.5
+            card.style.transform = `translateY(-4px) rotateX(${-y * 7}deg) rotateY(${x * 7}deg)`
+          })
+        })
+        card.addEventListener('mouseleave', () => { card.style.transform = '' })
+      })
+    }
 
     // ══════════════════════════════
     // LIGHTBOX — zoom + pan + slideshow
@@ -3032,8 +3134,21 @@
         document.getElementById('lb-counter').textContent = total > 1 ? `${idx + 1} / ${total}` : ''
       },
 
-      prev() { this.index = (this.index - 1 + this.images.length) % this.images.length; this.loadImage(this.index) },
-      next() { this.index = (this.index + 1) % this.images.length; this.loadImage(this.index) },
+      slideTo(newIdx, dir) {
+        const img = document.getElementById('lb-img')
+        const outClass = dir > 0 ? 'slide-out-left' : 'slide-out-right'
+        const inClass  = dir > 0 ? 'slide-in-left'  : 'slide-in-right'
+        img.classList.add(outClass)
+        setTimeout(() => {
+          img.classList.remove(outClass)
+          img.classList.add(inClass)
+          this.index = newIdx
+          this.loadImage(this.index)
+          requestAnimationFrame(() => requestAnimationFrame(() => img.classList.remove(inClass)))
+        }, 180)
+      },
+      prev() { if (this.images.length < 2) return; this.slideTo((this.index - 1 + this.images.length) % this.images.length, -1) },
+      next() { if (this.images.length < 2) return; this.slideTo((this.index + 1) % this.images.length, 1) },
 
       updateNav() {
         const multi = this.images.length > 1
@@ -3081,10 +3196,10 @@
       if (e.key === '-') lb.zoom(-0.5)
     })
 
-    // Touch swipe navigation
+    // Mouse drag to pan + touch swipe (shared lbContainer)
+    const lbContainer = document.getElementById('lb-img-container')
     let touchStartX = 0, touchStartY = 0
-    const lbContainerTouch = document.getElementById('lb-img-container')
-    lbContainerTouch.addEventListener('touchstart', e => {
+    lbContainer.addEventListener('touchstart', e => {
       touchStartX = e.touches[0].clientX
       touchStartY = e.touches[0].clientY
     }, { passive: true })
@@ -3097,13 +3212,10 @@
     }, { passive: true })
 
     // Scroll wheel zoom
-    document.getElementById('lb-img-container').addEventListener('wheel', e => {
+    lbContainer.addEventListener('wheel', e => {
       e.preventDefault()
       lb.zoom(e.deltaY < 0 ? 0.4 : -0.4)
     }, { passive: false })
-
-    // Mouse drag to pan
-    const lbContainer = document.getElementById('lb-img-container')
     lbContainer.addEventListener('mousedown', e => {
       if (lb.scale <= 1) return
       lb.isDragging = true; lb.startX = e.clientX - lb.panX; lb.startY = e.clientY - lb.panY
