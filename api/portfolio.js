@@ -10,6 +10,14 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
+  // DEBUG — xóa sau khi fix
+  if (req.url.includes('debug')) {
+    return res.status(200).json({
+      SUPABASE_URL: process.env.SUPABASE_URL || 'NOT SET',
+      SUPABASE_SERVICE_KEY: process.env.SUPABASE_SERVICE_KEY ? 'SET (' + process.env.SUPABASE_SERVICE_KEY.substring(0, 10) + '...)' : 'NOT SET'
+    })
+  }
+
   const { data, error } = await supabase
     .from('portfolio')
     .select('id, sort_order, featured, slug, title, category, year, tags, thumb_url, full_urls, video_id')
