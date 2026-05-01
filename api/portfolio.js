@@ -10,6 +10,15 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
+  if (req.url.includes('debug')) {
+    const key = process.env.SUPABASE_SERVICE_KEY || ''
+    return res.status(200).json({
+      key_length: key.length,
+      key_start: key.substring(0, 20),
+      key_end: key.substring(key.length - 10)
+    })
+  }
+
 
   const { data, error } = await supabase
     .from('portfolio')
