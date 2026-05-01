@@ -18,7 +18,7 @@ module.exports = async function handler(req, res) {
     .order('sort_order', { ascending: true })
 
   if (error) {
-    return res.status(500).json({ error: 'Failed to load portfolio' })
+    return res.status(500).json({ error: error.message, code: error.code, details: error.details })
   }
 
   res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600')
