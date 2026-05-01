@@ -3083,8 +3083,8 @@
 
     // Touch swipe navigation
     let touchStartX = 0, touchStartY = 0
-    const lbContainer = document.getElementById('lb-img-container')
-    lbContainer.addEventListener('touchstart', e => {
+    const lbContainerTouch = document.getElementById('lb-img-container')
+    lbContainerTouch.addEventListener('touchstart', e => {
       touchStartX = e.touches[0].clientX
       touchStartY = e.touches[0].clientY
     }, { passive: true })
