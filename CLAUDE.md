@@ -50,6 +50,7 @@
 | Ảnh full size lightbox | Supabase → `portfolio.full_urls` (array) |
 | Video dự án | Supabase → `portfolio.video_id` |
 | Hero showreel | Supabase → `site_config.showreel_video_id` |
+| Ảnh 360° dự án | Supabase → `portfolio.urls_360` (array) — R2 path: `portfolio/{slug}/360_01.jpg` |
 
 ---
 
@@ -87,11 +88,24 @@
   - Navbar ẩn khi scroll xuống nhanh, hiện khi scroll lên
 - **Hero showreel** — xóa vùng đen trống (`justify-content: center`), load YouTube ID từ `site_config.showreel_video_id` tự động
 
+### ✅ Đã hoàn thành (session 3 — 2026-05-02)
+- **4 dự án live** — `do-thi-xanh`, `cong-vien-1`, `park-river-walk` + 1 dự án thêm trực tiếp qua Supabase
+- **Fix hero khoảng đen** — đổi `justify-content: center` → `flex-start`, padding-top 96px → 88px. Nội dung bắt đầu ngay dưới navbar.
+- **Showreel click-to-play** — thay vì replace innerHTML bằng autoplay iframe (hay bị browser block), giờ click vào showreel/play button mở YouTube modal hiện có. Đáng tin cậy 100%, không phụ thuộc autoplay policy.
+- **Services 4 card** — thêm "🔮 Ảnh 360° & Virtual Tour". Grid 4 cột → 2 cột (≤1100px) → 1 cột (≤520px).
+- **Section Tour 360°** (`#tour-360`) — tự động hiện khi có dự án có `urls_360` trong Supabase. Ẩn hoàn toàn nếu chưa có data. Cards có thumbnail + nút play vàng 64px.
+- **Pannellum viewer** (`#modal-360`) — full-screen 360° panorama viewer. Lazy load CDN `pannellum@2.5.6` chỉ khi mở lần đầu. Hỗ trợ prev/next nhiều ảnh, ESC đóng, không memory leak.
+- **Portfolio cards** — nút "🔮 360°" gold xuất hiện khi dự án có `urls_360`.
+- **`api/portfolio.js`** — thêm `urls_360` vào SELECT.
+- **Fix HTML bug** — `</button>` đóng sai ở `reel-play-btn` (dùng `</div>` thay vì `</button>`) từ session 2, đã sửa.
+
 ### 🔲 Việc cần làm tiếp
 
-**[UNBLOCK — data]**
-- [ ] Upload ảnh cho `cong-vien-1` và `park-river-walk` lên R2 → bật `active=true`
-- [ ] Paste YouTube showreel ID vào Supabase `site_config.showreel_video_id`
+**[UNBLOCK — bạn tự làm trong Supabase]**
+- [ ] Chạy SQL: `ALTER TABLE portfolio ADD COLUMN urls_360 text[] DEFAULT NULL;`
+- [ ] Kiểm tra `site_config` có row `key=showreel_video_id` chưa — nếu chưa thêm row + paste YouTube ID
+- [ ] Upload ảnh 360° lên R2: `portfolio/{slug}/360_01.jpg` → update `urls_360` array trong Supabase
+- [ ] Upload ảnh cho `cong-vien-1` lên R2 → bật `active=true`
 - [ ] Thêm `video_id` cho các dự án khi có video
 
 **[HIGH]**
@@ -99,11 +113,12 @@
 - [ ] Footer — email, địa chỉ studio
 
 **[MEDIUM]**
-- [ ] Favicon 32×32 + 192×192 (OG meta tags đã có, chỉ còn favicon)
+- [ ] Favicon 32×32 + 192×192
+- [ ] Cập nhật `/add-project` command thêm câu hỏi ảnh 360°
 
 **[PHASE 2]**
 - [ ] Next.js 14 migration
-- [ ] Trang `/portfolio` với filter
+- [ ] Trang `/portfolio` với filter category
 - [ ] Form `/contact`
 
 ### Quyết định quan trọng
@@ -113,3 +128,8 @@
 - **Showreel ID trong Supabase** — `site_config.showreel_video_id`, thay trực tiếp trên Supabase không cần redeploy
 - **`var(--dim)=#444` không dùng cho text** — tương phản quá thấp (~2.7:1), chỉ dùng `var(--muted)=#888` trở lên
 - **Slash commands `/add-project`** — dùng để thêm dự án mới, xuất SQL + R2 path sẵn, không viết tay
+- **Showreel dùng click-to-modal thay vì autoplay iframe** — YouTube autoplay iframe bị Chrome block khi không có user gesture trước đó; modal approach (openYtModal) đáng tin cậy hơn, không phụ thuộc autoplay policy
+- **Section Tour 360° ẩn mặc định** — `hidden` attribute trên `<section>`, JS bỏ hidden khi có data. Tránh khoảng trắng xấu khi chưa có ảnh 360
+- **Pannellum lazy load** — CDN JS (~150KB) chỉ load khi user click mở viewer lần đầu, không ảnh hưởng page load score
+- **`urls_360` là array** — hỗ trợ nhiều góc nhìn (nội thất, ngoại thất, sân vườn...) per dự án, viewer có prev/next
+- **R2 ảnh 360° dùng JPG không phải WebP** — equirectangular panorama thường rất lớn (8000×4000px+), JPG quality 85 cho file size hợp lý; WebP gain không đáng kể ở resolution này
