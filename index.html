@@ -17,6 +17,8 @@
   <meta name="twitter:title" content="HD5 Studio — Diễn Họa Kiến Trúc Đỉnh Cao" />
   <meta name="twitter:description" content="Sáng tạo không giới hạn, Render không chờ đợi." />
   <meta name="twitter:image" content="https://pub-51ede49b8dd446e48127b94ee7d22d71.r2.dev/portfolio/do-thi-xanh/thumb.webp" />
+  <link rel="canonical" href="https://hd5studio.com" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"LocalBusiness","name":"HD5 Studio","url":"https://hd5studio.com","telephone":"0979591156","image":"https://pub-51ede49b8dd446e48127b94ee7d22d71.r2.dev/portfolio/do-thi-xanh/thumb.webp","address":{"@type":"PostalAddress","addressCountry":"VN"},"description":"Diễn họa kiến trúc 4K, TVC bất động sản, ảnh 360° virtual tour chuyên nghiệp."}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -145,6 +147,8 @@
       color: var(--text);
       transform: translateY(-1px);
     }
+
+    .btn-sm { font-size: 13px; padding: 8px 16px; }
 
     .divider {
       height: 1px;
@@ -1398,7 +1402,7 @@
       line-height: 1.4;
     }
 
-    .port-info p { font-size: 11px; color: var(--dim); }
+    .port-info p { font-size: 11px; color: var(--muted); }
 
     /* Skeleton cards khi đang load */
     .port-skeleton-item {
@@ -2250,8 +2254,6 @@
       .lb-img-container { max-width: 100vw; max-height: 75vh; border-radius: 0; }
       .yt-frame-wrap { width: 100vw; }
 
-      .svc-grid { grid-template-columns: repeat(2, 1fr); }
-
       .tour360-grid { grid-template-columns: 1fr; }
 
       .m360-nav { display: none; }
@@ -2348,8 +2350,8 @@
           <li><a href="#testimonials">Đánh giá</a></li>
         </ul>
         <div class="nav-right">
-          <a href="tel:0979591156" class="btn btn-outline" style="font-size:13px;padding:8px 14px;">0979 591 156</a>
-          <a href="#cta" class="btn btn-gold" style="font-size:13px;padding:8px 16px;">Liên hệ →</a>
+          <a href="tel:0979591156" class="btn btn-outline btn-sm">0979 591 156</a>
+          <a href="#cta" class="btn btn-gold btn-sm">Liên hệ →</a>
         </div>
         <button class="hbg" id="hbg" aria-label="Menu">
           <span></span><span></span><span></span>
@@ -2956,12 +2958,12 @@
   <div id="img-lightbox" hidden>
     <div class="lb-backdrop" id="lb-backdrop"></div>
     <div class="lb-wrap">
-      <button class="lb-close" id="lb-close">✕</button>
-      <button class="lb-nav lb-prev" id="lb-prev">‹</button>
-      <button class="lb-nav lb-next" id="lb-next">›</button>
+      <button class="lb-close" id="lb-close" aria-label="Đóng lightbox">✕</button>
+      <button class="lb-nav lb-prev" id="lb-prev" aria-label="Ảnh trước">‹</button>
+      <button class="lb-nav lb-next" id="lb-next" aria-label="Ảnh sau">›</button>
       <div class="lb-zoom-controls">
-        <button class="lb-zoom-btn" id="lb-zoom-out">−</button>
-        <button class="lb-zoom-btn" id="lb-zoom-in">+</button>
+        <button class="lb-zoom-btn" id="lb-zoom-out" aria-label="Thu nhỏ">−</button>
+        <button class="lb-zoom-btn" id="lb-zoom-in" aria-label="Phóng to">+</button>
       </div>
       <span class="lb-zoom-level" id="lb-zoom-level">100%</span>
       <div class="lb-img-container" id="lb-img-container">
@@ -2983,7 +2985,7 @@
   <div id="yt-modal" hidden>
     <div class="yt-backdrop" id="yt-backdrop"></div>
     <div class="yt-frame-wrap">
-      <button class="yt-close" id="yt-close">✕</button>
+      <button class="yt-close" id="yt-close" aria-label="Đóng video">✕</button>
       <iframe id="yt-iframe" src="" allow="autoplay; fullscreen; picture-in-picture"
               frameborder="0" title="HD5 Studio Video"></iframe>
     </div>
@@ -3043,7 +3045,7 @@
           <p class="tcard-body">"Chất lượng render vượt xa kỳ vọng. Ảnh dùng cho marketing BĐS nhận phản hồi rất tích
             cực từ khách hàng. Tiến độ đúng như cam kết, không cần đốc thúc."</p>
           <div class="tcard-author">
-            <div class="tcard-av">N</div>
+            <div class="tcard-av">H</div>
             <div>
               <div class="tcard-name">Phùng Tiến Hưng</div>
               <div class="tcard-role">Giám đốc dự án · Soi Gái</div>
@@ -3055,7 +3057,7 @@
           <p class="tcard-body">"Làm việc với nhiều studio nhưng HD5 là lần đầu tôi thấy pipeline chuyên nghiệp đến vậy.
             Concept draft giao trong 24h, revision nhanh, giá hợp lý."</p>
           <div class="tcard-author">
-            <div class="tcard-av">T</div>
+            <div class="tcard-av">K</div>
             <div>
               <div class="tcard-name">Trần Minh Khoa</div>
               <div class="tcard-role">Principal Architect · ARC Studio</div>
@@ -3067,7 +3069,7 @@
           <p class="tcard-body">"TVC do HD5 làm có cảm xúc thật — ánh sáng golden hour, camera mượt mà. Video đạt 500K
             view trên Facebook chỉ sau 3 ngày đăng."</p>
           <div class="tcard-author">
-            <div class="tcard-av">P</div>
+            <div class="tcard-av">L</div>
             <div>
               <div class="tcard-name">Phạm Thị Lan Anh</div>
               <div class="tcard-role">Marketing Director · SunGroup</div>
@@ -3203,14 +3205,14 @@
         renderPortfolio(items)
       } catch (e) {
         document.getElementById('port-grid').innerHTML =
-          '<p style="color:var(--dim);font-size:13px;grid-column:1/-1;text-align:center;padding:40px 0">Đang tải danh sách dự án...</p>'
+          '<p style="color:var(--muted);font-size:13px;grid-column:1/-1;text-align:center;padding:40px 0">Đang tải danh sách dự án...</p>'
       }
     }
 
     function renderPortfolio(items) {
       const grid = document.getElementById('port-grid')
       if (!items.length) {
-        grid.innerHTML = '<p style="color:var(--dim);font-size:13px;grid-column:1/-1;text-align:center;padding:40px 0">Chưa có dự án nào.</p>'
+        grid.innerHTML = '<p style="color:var(--muted);font-size:13px;grid-column:1/-1;text-align:center;padding:40px 0">Chưa có dự án nào.</p>'
         return
       }
       grid.innerHTML = items.map((p, i) => {
@@ -3454,6 +3456,7 @@
         this.applyTransform()
         document.getElementById('lb-zoom-level').textContent = '100%'
         img.src = this.images[idx]
+        img.alt = this.title ? `${this.title} — ảnh ${idx + 1}` : ''
         img.onload = () => {
           img.style.opacity = '1'
           loading.classList.remove('visible')
