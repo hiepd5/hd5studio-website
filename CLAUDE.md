@@ -50,7 +50,7 @@
 | Ảnh full size lightbox | Supabase → `portfolio.full_urls` (array) |
 | Video dự án | Supabase → `portfolio.video_id` |
 | Hero showreel | Supabase → `site_config.showreel_video_id` |
-| Ảnh 360° dự án | Supabase → `portfolio.urls_360` (array) — R2 path: `portfolio/{slug}/360_01.jpg` |
+| Dự án ảnh 360° | Supabase → bảng `tour360` (độc lập) — R2 path: `portfolio/{slug}/306_xx.webp` |
 
 ---
 
@@ -99,22 +99,38 @@
 - **`api/portfolio.js`** — thêm `urls_360` vào SELECT.
 - **Fix HTML bug** — `</button>` đóng sai ở `reel-play-btn` (dùng `</div>` thay vì `</button>`) từ session 2, đã sửa.
 
+### ✅ Đã hoàn thành (session 4 — 2026-05-02)
+- **Tách Tour 360° thành section độc lập** — không còn phụ thuộc bảng `portfolio`. Bảng riêng `tour360` trong Supabase, API riêng `api/tour360.js`.
+- **`api/tour360.js`** — Vercel serverless mới, fetch từ bảng `tour360`, cache s-maxage=300. Portfolio cards không còn nút 🔮 360°.
+- **3 dự án 360° live:**
+  - `360-danko-bac-giang` — 10 ảnh (file tên `306_xx.webp`)
+  - `360-vic-grand-viet-tri` — 6 ảnh
+  - `360-danko-riverside` — 5 ảnh
+- **Fix CORS R2** — thêm CORS policy cho bucket `hd5-studio-assets` cho phép `hd5studio.com` + `localhost:3000`. Pannellum dùng XHR nên bắt buộc cần CORS header.
+- **Mobile bottom nav 360° viewer** — thanh điều hướng nổi phía dưới viewer trên mobile: nút "← Trước" và "Tiếp →" lớn, counter giữa, nền blur. Side buttons ẩn trên mobile.
+- **Nâng điểm review 63 → ~75/80:**
+  - Canonical link + LocalBusiness JSON-LD schema
+  - `var(--dim)` → `var(--muted)` toàn bộ body text (WCAG AA)
+  - Xóa `svc-grid` responsive rule 768px chồng chéo (logic sai)
+  - `aria-label` đầy đủ cho tất cả lightbox/modal/yt buttons
+  - `lb-img alt` cập nhật động theo tên dự án khi load ảnh
+  - Avatar testimonials sửa đúng initial: H/K/L
+  - Navbar buttons: class `.btn-sm` thay inline style
+
 ### 🔲 Việc cần làm tiếp
 
-**[UNBLOCK — bạn tự làm trong Supabase]**
-- [ ] Chạy SQL: `ALTER TABLE portfolio ADD COLUMN urls_360 text[] DEFAULT NULL;`
-- [ ] Kiểm tra `site_config` có row `key=showreel_video_id` chưa — nếu chưa thêm row + paste YouTube ID
-- [ ] Upload ảnh 360° lên R2: `portfolio/{slug}/360_01.jpg` → update `urls_360` array trong Supabase
+**[UNBLOCK — bạn tự làm]**
+- [ ] Kiểm tra `site_config` có row `key=showreel_video_id` chưa — paste YouTube ID vào
 - [ ] Upload ảnh cho `cong-vien-1` lên R2 → bật `active=true`
-- [ ] Thêm `video_id` cho các dự án khi có video
+- [ ] Thêm `video_id` cho các dự án khi có video YouTube
 
 **[HIGH]**
-- [ ] Testimonials — 3 quote thật (tên, chức vụ, công ty)
-- [ ] Footer — email, địa chỉ studio
+- [ ] Testimonials — thay 3 quote placeholder bằng nội dung thật (tên, chức vụ, công ty)
+- [ ] Footer — thêm email liên hệ, địa chỉ studio
 
 **[MEDIUM]**
-- [ ] Favicon 32×32 + 192×192
-- [ ] Cập nhật `/add-project` command thêm câu hỏi ảnh 360°
+- [ ] Favicon 32×32 + 192×192 (ảnh hưởng SEO + professional look)
+- [ ] Cập nhật `/add-project` command thêm trường `urls_360` và câu hỏi về ảnh 360°
 
 **[PHASE 2]**
 - [ ] Next.js 14 migration
@@ -129,7 +145,10 @@
 - **`var(--dim)=#444` không dùng cho text** — tương phản quá thấp (~2.7:1), chỉ dùng `var(--muted)=#888` trở lên
 - **Slash commands `/add-project`** — dùng để thêm dự án mới, xuất SQL + R2 path sẵn, không viết tay
 - **Showreel dùng click-to-modal thay vì autoplay iframe** — YouTube autoplay iframe bị Chrome block khi không có user gesture trước đó; modal approach (openYtModal) đáng tin cậy hơn, không phụ thuộc autoplay policy
-- **Section Tour 360° ẩn mặc định** — `hidden` attribute trên `<section>`, JS bỏ hidden khi có data. Tránh khoảng trắng xấu khi chưa có ảnh 360
 - **Pannellum lazy load** — CDN JS (~150KB) chỉ load khi user click mở viewer lần đầu, không ảnh hưởng page load score
-- **`urls_360` là array** — hỗ trợ nhiều góc nhìn (nội thất, ngoại thất, sân vườn...) per dự án, viewer có prev/next
-- **R2 ảnh 360° dùng JPG không phải WebP** — equirectangular panorama thường rất lớn (8000×4000px+), JPG quality 85 cho file size hợp lý; WebP gain không đáng kể ở resolution này
+- **Tour 360° dùng bảng `tour360` độc lập** — không dùng `portfolio.urls_360`; lý do: 360° là sản phẩm riêng biệt, có thể có dự án 360° không thuộc portfolio thường, quản lý tách biệt dễ hơn
+- **R2 CORS bắt buộc cho Pannellum** — `<img>` không cần CORS nhưng Pannellum dùng `XMLHttpRequest` để đọc binary → R2 phải có CORS policy cho phép domain production
+- **File ảnh 360° thực tế tên `306_xx.webp`** — user upload nhầm tên (306 thay vì 360); fix bằng cách cập nhật URL trong Supabase thay vì upload lại — nhanh hơn
+- **WebP cho ảnh 360°** — dùng WebP (không phải JPG) vì Pannellum hỗ trợ tốt và tiết kiệm ~35% dung lượng; target ≤1.5MB/ảnh ở 8000×4000px
+- **Mobile 360° viewer** — side buttons ẩn hoàn toàn trên mobile (khó bấm khi đang xoay panorama), thay bằng bottom nav bar pill riêng dễ bấm hơn
+- **`aria-label` trên tất cả icon-only buttons** — screen reader đọc `✕` là "cross" không phải "đóng"; luôn thêm aria-label cho button chỉ có ký tự Unicode
