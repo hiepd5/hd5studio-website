@@ -3166,7 +3166,6 @@
         if (!res.ok) throw new Error('API error')
         const items = await res.json()
         renderPortfolio(items)
-        renderTour360(items)
       } catch (e) {
         document.getElementById('port-grid').innerHTML =
           '<p style="color:var(--dim);font-size:13px;grid-column:1/-1;text-align:center;padding:40px 0">Đang tải danh sách dự án...</p>'
@@ -3187,10 +3186,6 @@
         const videoBtn = p.video_id
           ? `<button class="port-btn-play" data-video="${p.video_id}">▶ Video</button>`
           : ''
-        const btn360 = (p.urls_360 && p.urls_360.length)
-          ? `<button class="port-btn-360" data-action="open360">🔮 360°</button>`
-          : ''
-        const urls360Json = JSON.stringify(p.urls_360 || []).replace(/"/g, '&quot;')
         const thumbImg = p.thumb_url
           ? `<img src="${p.thumb_url}" alt="${p.title}" width="800" height="600" loading="lazy">`
           : `<div class="port-thumb-placeholder"></div>`
@@ -3199,8 +3194,7 @@
                data-full-urls="${fullUrlsJson}"
                data-title="${p.title}"
                data-category="${p.category || ''}"
-               data-video="${p.video_id || ''}"
-               data-urls-360="${urls360Json}">
+               data-video="${p.video_id || ''}">
             <div class="port-thumb">
               ${thumbImg}
               <div class="port-overlay">
@@ -3208,7 +3202,6 @@
                 <div class="port-overlay-actions">
                   <button class="port-btn-view" data-action="lightbox">🔍 Xem ảnh</button>
                   ${videoBtn}
-                  ${btn360}
                 </div>
               </div>
             </div>
@@ -3234,11 +3227,6 @@
           e.stopPropagation()
           openYtModal(e.currentTarget.dataset.video)
         })
-        card.querySelector('[data-action="open360"]')?.addEventListener('click', e => {
-          e.stopPropagation()
-          const urls = JSON.parse(card.dataset.urls360 || '[]')
-          if (urls.length) pano360.open(urls, card.dataset.title)
-        })
         // Click vào thumb cũng mở lightbox
         card.querySelector('.port-thumb')?.addEventListener('click', () => {
           const urls = JSON.parse(card.dataset.fullUrls || '[]')
@@ -3249,41 +3237,47 @@
 
     loadPortfolio()
 
-    // Tour 360° section
-    function renderTour360(items) {
-      const section = document.getElementById('tour-360')
-      const grid = document.getElementById('tour360-grid')
-      const with360 = items.filter(p => p.urls_360 && p.urls_360.length)
-      if (!with360.length) return
-      section.removeAttribute('hidden')
-      grid.innerHTML = with360.map(p => {
-        const thumb = p.thumb_url ? `<img src="${p.thumb_url}" alt="${p.title}" loading="lazy">` : ''
-        const urls360Json = JSON.stringify(p.urls_360).replace(/"/g, '&quot;')
-        const count = p.urls_360.length
-        return `
-          <div class="tour360-card rx" data-urls360="${urls360Json}" data-title="${p.title}">
-            <div class="tour360-thumb">
-              ${thumb}
-              <div class="tour360-overlay">
-                <button class="tour360-play-btn" aria-label="Xem tour 360">🔮</button>
+    // ══════════════════════════════
+    // TOUR 360° — fetch từ /api/tour360 (bảng độc lập)
+    // ══════════════════════════════
+    async function loadTour360() {
+      try {
+        const res = await fetch('/api/tour360')
+        if (!res.ok) throw new Error()
+        const items = await res.json()
+        if (!items.length) return
+        const section = document.getElementById('tour-360')
+        const grid = document.getElementById('tour360-grid')
+        section.removeAttribute('hidden')
+        grid.innerHTML = items.map(p => {
+          const thumb = p.thumb_url ? `<img src="${p.thumb_url}" alt="${p.title}" loading="lazy">` : ''
+          const urls360Json = JSON.stringify(p.urls_360 || []).replace(/"/g, '&quot;')
+          const count = (p.urls_360 || []).length
+          return `
+            <div class="tour360-card rx" data-urls360="${urls360Json}" data-title="${p.title}">
+              <div class="tour360-thumb">
+                ${thumb}
+                <div class="tour360-overlay">
+                  <button class="tour360-play-btn" aria-label="Xem tour 360">🔮</button>
+                </div>
+                <span class="tour360-badge">360° · ${count} góc nhìn</span>
               </div>
-              <span class="tour360-badge">360° · ${count} góc nhìn</span>
-            </div>
-            <div class="tour360-info">
-              <h4>${p.title}</h4>
-              <p>${p.category || ''}${p.year ? ' · ' + p.year : ''}</p>
-            </div>
-          </div>`
-      }).join('')
-
-      grid.querySelectorAll('.tour360-card').forEach(card => {
-        obs.observe(card)
-        card.addEventListener('click', () => {
-          const urls = JSON.parse(card.dataset.urls360.replace(/&quot;/g, '"'))
-          if (urls.length) pano360.open(urls, card.dataset.title)
+              <div class="tour360-info">
+                <h4>${p.title}</h4>
+                <p>${p.location || p.description || ''}${p.year ? ' · ' + p.year : ''}</p>
+              </div>
+            </div>`
+        }).join('')
+        grid.querySelectorAll('.tour360-card').forEach(card => {
+          obs.observe(card)
+          card.addEventListener('click', () => {
+            const urls = JSON.parse(card.dataset.urls360.replace(/&quot;/g, '"'))
+            if (urls.length) pano360.open(urls, card.dataset.title)
+          })
         })
-      })
+      } catch (e) {}
     }
+    loadTour360()
 
     // pano360 — Pannellum 360° viewer
     const pano360 = {
