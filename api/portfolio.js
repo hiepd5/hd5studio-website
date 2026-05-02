@@ -14,7 +14,7 @@ module.exports = async function handler(req, res) {
 
   const { data, error } = await supabase
     .from('portfolio')
-    .select('id, sort_order, featured, slug, title, category, year, tags, thumb_url, full_urls, video_id')
+    .select('id, sort_order, featured, slug, title, category, year, tags, thumb_url, full_urls, video_id, urls_360')
     .eq('active', true)
     .order('sort_order', { ascending: true })
 
