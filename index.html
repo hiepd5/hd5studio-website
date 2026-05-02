@@ -485,239 +485,73 @@
     }
 
     /* ═══════════════════════════════════════
-     HERO SHOWREEL
+     CINEMA SHOWREEL
   ═══════════════════════════════════════ */
-    .hero-reel {
+    .cinema-wrap {
       width: 100%;
-      max-width: 960px;
-      margin: 0 auto 52px;
+      max-width: 900px;
+      margin: 0 auto 48px;
+      perspective: 1400px;
+    }
+
+    .cinema-stage {
       position: relative;
-      border-radius: 16px;
+      transform: rotateX(10deg) rotateY(-2deg) scale(0.95);
+      transform-origin: center bottom;
+      transition: transform .6s cubic-bezier(.16,1,.3,1);
+    }
+
+    .cinema-wrap:hover .cinema-stage {
+      transform: rotateX(6deg) rotateY(-1deg) scale(0.97);
+    }
+
+    .cinema-screen {
+      position: relative;
+      aspect-ratio: 16/9;
+      border-radius: 10px;
       overflow: hidden;
-      border: 1px solid var(--b2);
-      box-shadow: 0 40px 100px rgba(0, 0, 0, .7), 0 0 0 1px rgba(255, 255, 255, .03);
-      cursor: pointer;
-      transition: box-shadow .4s ease, transform .4s ease;
-    }
-
-    .hero-reel:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 48px 120px rgba(0, 0, 0, .75), 0 0 60px rgba(200, 169, 110, .08), 0 0 0 1px rgba(200, 169, 110, .15);
-    }
-
-    .reel-inner {
-      aspect-ratio: 16 / 9;
-      position: relative;
+      border: 1px solid rgba(200,169,110,.25);
       background: #04030a;
-      overflow: hidden;
-      display: block;
+      box-shadow:
+        0 60px 120px rgba(0,0,0,.85),
+        0 0 80px rgba(200,169,110,.06),
+        inset 0 0 0 1px rgba(255,255,255,.04);
     }
 
-    .reel-scene {
+    .cinema-screen iframe {
       position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    .reel-topbar {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      padding: 16px 22px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      z-index: 10;
-      background: linear-gradient(to bottom, rgba(0, 0, 0, .55) 0%, transparent 100%);
-    }
-
-    .reel-live {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, .65);
-    }
-
-    .reel-live-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #22c55e;
-      box-shadow: 0 0 8px #22c55e;
-      animation: reel-pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes reel-pulse {
-
-      0%,
-      100% {
-        opacity: 1;
-        box-shadow: 0 0 8px #22c55e;
-      }
-
-      50% {
-        opacity: .4;
-        box-shadow: 0 0 3px #22c55e;
-      }
-    }
-
-    .reel-top-right {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: .06em;
-      color: rgba(255, 255, 255, .35);
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-    }
-
-    .reel-play-btn {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      inset: -2px;
+      width: calc(100% + 4px);
+      height: calc(100% + 4px);
       border: none;
-      background: transparent;
-      padding: 0;
-      cursor: pointer;
-      text-align: left;
-      z-index: 10;
+      pointer-events: none;
     }
 
-    .reel-play-ring {
-      width: 80px;
+    .cinema-glow {
+      position: absolute;
+      bottom: -40px;
+      left: 10%;
+      right: 10%;
       height: 80px;
-      border-radius: 50%;
-      background: rgba(200, 169, 110, .12);
-      border: 1.5px solid rgba(200, 169, 110, .35);
-      backdrop-filter: blur(12px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all .35s cubic-bezier(.16, 1, .3, 1);
-      box-shadow: 0 0 0 0 rgba(200, 169, 110, .2);
+      background: radial-gradient(ellipse, rgba(200,169,110,.18) 0%, transparent 70%);
+      filter: blur(20px);
+      pointer-events: none;
     }
 
-    .hero-reel:hover .reel-play-ring {
-      background: rgba(200, 169, 110, .22);
-      border-color: rgba(200, 169, 110, .65);
-      transform: scale(1.1);
-      box-shadow: 0 0 40px rgba(200, 169, 110, .25);
-    }
-
-    .reel-play-ring svg {
-      margin-left: 4px;
-    }
-
-    .reel-meta {
+    .cinema-reflection {
       position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 48px 24px 22px;
-      background: linear-gradient(to top, rgba(0, 0, 0, .88) 0%, rgba(0, 0, 0, .3) 60%, transparent 100%);
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      z-index: 10;
-      gap: 16px;
+      bottom: -30px;
+      left: 5%;
+      right: 5%;
+      height: 30px;
+      background: linear-gradient(to bottom, rgba(200,169,110,.06), transparent);
+      border-radius: 0 0 10px 10px;
+      filter: blur(4px);
+      transform: scaleY(-1);
+      pointer-events: none;
     }
 
-    .reel-meta-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: rgba(255, 255, 255, .85);
-      line-height: 1.3;
-    }
-
-    .reel-meta-sub {
-      font-size: 11.5px;
-      color: rgba(255, 255, 255, .38);
-      margin-top: 3px;
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      letter-spacing: .03em;
-    }
-
-    .reel-badges {
-      display: flex;
-      gap: 6px;
-      flex-shrink: 0;
-    }
-
-    .reel-bdg {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      padding: 4px 9px;
-      border-radius: 5px;
-    }
-
-    .reel-bdg-gold {
-      border: 1px solid rgba(200, 169, 110, .35);
-      color: var(--gold);
-      background: rgba(200, 169, 110, .1);
-    }
-
-    .reel-bdg-dim {
-      border: 1px solid rgba(255, 255, 255, .12);
-      color: rgba(255, 255, 255, .5);
-      background: rgba(255, 255, 255, .04);
-    }
-
-    /* Progress bar (fake video scrubber) */
-    .reel-scrubber {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: rgba(255, 255, 255, .08);
-      z-index: 11;
-    }
-
-    .reel-scrubber-fill {
-      height: 100%;
-      width: 38%;
-      background: linear-gradient(90deg, var(--gold), #e0c07a);
-      border-radius: 1px;
-      position: relative;
-    }
-
-    .reel-scrubber-fill::after {
-      content: '';
-      position: absolute;
-      right: -4px;
-      top: -3px;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--gold);
-      box-shadow: 0 0 6px var(--gold);
-    }
-
-    @media (max-width: 768px) {
-      .reel-play-ring {
-        width: 60px;
-        height: 60px;
-      }
-
-      .reel-meta-title {
-        font-size: 12px;
-      }
-
-      .reel-bdg {
-        font-size: 9px;
-        padding: 3px 7px;
-      }
-    }
-
-    /* ═══════════════════════════════════════
+        /* ═══════════════════════════════════════
      TRUST BAR
   ═══════════════════════════════════════ */
     #trust {
@@ -2203,6 +2037,12 @@
     }
 
     @media (max-width: 768px) {
+      .cinema-stage {
+        transform: rotateX(6deg) rotateY(-1deg) scale(0.97);
+      }
+      .cinema-wrap:hover .cinema-stage {
+        transform: rotateX(4deg) rotateY(0deg) scale(0.99);
+      }
 
       .nav-links,
       .nav-right {
@@ -2289,6 +2129,9 @@
     }
 
     @media (max-width: 520px) {
+      .cinema-stage {
+        transform: rotateX(4deg) scale(0.98);
+      }
 
       .wrap,
       .wrap-sm {
@@ -2376,6 +2219,15 @@
     <div class="hero-line"></div>
     <div class="hero-dots"></div>
 
+    <!-- CINEMA SHOWREEL — YouTube ID từ Supabase: site_config → showreel_video_id -->
+    <div class="cinema-wrap rx d1">
+      <div class="cinema-stage">
+        <div class="cinema-screen" id="cinema-screen"></div>
+        <div class="cinema-glow"></div>
+        <div class="cinema-reflection"></div>
+      </div>
+    </div>
+
     <div class="label rx"><span class="label-dot"></span>D5 Render Studio · HiepD5</div>
 
     <h1 class="rx d1">
@@ -2392,262 +2244,6 @@
       <a href="#services" class="btn btn-outline">Khám phá dịch vụ</a>
     </div>
 
-    <!-- SHOWREEL — đặt YouTube ID trong Supabase: site_config → showreel_video_id -->
-    <div class="hero-reel rx d3">
-      <div class="reel-inner">
-
-        <!-- Architectural render SVG scene -->
-        <svg class="reel-scene" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid slice"
-          xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="rsky" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#03020b" />
-              <stop offset="65%" stop-color="#07060f" />
-              <stop offset="100%" stop-color="#110d08" />
-            </linearGradient>
-            <radialGradient id="rcg1" cx="38%" cy="92%" r="50%">
-              <stop offset="0%" stop-color="#c8a96e" stop-opacity=".2" />
-              <stop offset="100%" stop-color="transparent" />
-            </radialGradient>
-            <radialGradient id="rcg2" cx="63%" cy="88%" r="42%">
-              <stop offset="0%" stop-color="#c8a96e" stop-opacity=".13" />
-              <stop offset="100%" stop-color="transparent" />
-            </radialGradient>
-            <radialGradient id="rcg3" cx="50%" cy="50%" r="70%">
-              <stop offset="60%" stop-color="transparent" />
-              <stop offset="100%" stop-color="#000" stop-opacity=".6" />
-            </radialGradient>
-            <linearGradient id="rground" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#0e0b07" />
-              <stop offset="100%" stop-color="#060504" />
-            </linearGradient>
-            <filter id="rf-blur">
-              <feGaussianBlur stdDeviation="22" />
-            </filter>
-            <filter id="rf-bloom">
-              <feGaussianBlur stdDeviation="5" result="b" />
-              <feMerge>
-                <feMergeNode in="b" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-            <filter id="rf-soft">
-              <feGaussianBlur stdDeviation="2" />
-            </filter>
-            <pattern id="rwin-s" width="9" height="12" patternUnits="userSpaceOnUse">
-              <rect x="1.5" y="2" width="3" height="4.5" fill="#d49040" opacity=".78" />
-            </pattern>
-            <pattern id="rwin-m" width="13" height="17" patternUnits="userSpaceOnUse">
-              <rect x="2" y="3" width="5" height="6" fill="#e0a850" opacity=".72" />
-            </pattern>
-            <pattern id="rwin-dim" width="9" height="12" patternUnits="userSpaceOnUse">
-              <rect x="1.5" y="2" width="3" height="4.5" fill="#6a4820" opacity=".3" />
-            </pattern>
-          </defs>
-
-          <!-- Sky -->
-          <rect width="1280" height="720" fill="url(#rsky)" />
-
-          <!-- Stars -->
-          <g>
-            <circle cx="38" cy="24" r=".9" fill="#fff" opacity=".55" />
-            <circle cx="94" cy="52" r=".7" fill="#fff" opacity=".4" />
-            <circle cx="152" cy="18" r=".8" fill="#fff" opacity=".6" />
-            <circle cx="231" cy="38" r=".6" fill="#fff" opacity=".35" />
-            <circle cx="289" cy="11" r=".9" fill="#fff" opacity=".5" />
-            <circle cx="367" cy="44" r=".7" fill="#fff" opacity=".45" />
-            <circle cx="434" cy="20" r=".8" fill="#fff" opacity=".55" />
-            <circle cx="512" cy="60" r=".6" fill="#fff" opacity=".3" />
-            <circle cx="578" cy="14" r=".9" fill="#fff" opacity=".6" />
-            <circle cx="645" cy="36" r=".7" fill="#fff" opacity=".4" />
-            <circle cx="712" cy="8" r=".8" fill="#fff" opacity=".5" />
-            <circle cx="780" cy="47" r=".6" fill="#fff" opacity=".35" />
-            <circle cx="848" cy="22" r=".9" fill="#fff" opacity=".55" />
-            <circle cx="916" cy="55" r=".7" fill="#fff" opacity=".4" />
-            <circle cx="984" cy="16" r=".8" fill="#fff" opacity=".5" />
-            <circle cx="1052" cy="40" r=".6" fill="#fff" opacity=".35" />
-            <circle cx="1120" cy="12" r=".9" fill="#fff" opacity=".6" />
-            <circle cx="1188" cy="52" r=".7" fill="#fff" opacity=".45" />
-            <circle cx="1248" cy="28" r=".8" fill="#fff" opacity=".5" />
-            <circle cx="68" cy="100" r=".6" fill="#fff" opacity=".3" />
-            <circle cx="190" cy="120" r=".7" fill="#fff" opacity=".4" />
-            <circle cx="348" cy="85" r=".5" fill="#fff" opacity=".35" />
-            <circle cx="492" cy="108" r=".8" fill="#fff" opacity=".45" />
-            <circle cx="612" cy="74" r=".6" fill="#fff" opacity=".3" />
-            <circle cx="764" cy="92" r=".7" fill="#fff" opacity=".4" />
-            <circle cx="920" cy="64" r=".5" fill="#fff" opacity=".35" />
-            <circle cx="1076" cy="82" r=".8" fill="#fff" opacity=".45" />
-            <circle cx="1230" cy="68" r=".6" fill="#fff" opacity=".3" />
-          </g>
-
-          <!-- Moon crescent -->
-          <circle cx="1130" cy="72" r="26" fill="#1e1914" opacity=".7" />
-          <circle cx="1138" cy="67" r="26" fill="#07060e" opacity=".95" />
-
-          <!-- City atmosphere glow -->
-          <rect x="0" y="300" width="1280" height="420" fill="url(#rcg1)" filter="url(#rf-blur)" />
-          <rect x="380" y="330" width="640" height="350" fill="url(#rcg2)" filter="url(#rf-blur)" />
-
-          <!-- ─── Background buildings (far, dark) ─── -->
-          <rect x="0" y="395" width="50" height="95" fill="#0c0b0d" />
-          <rect x="55" y="385" width="32" height="105" fill="#0d0c0e" />
-          <rect x="92" y="408" width="48" height="82" fill="#0b0a0c" />
-          <rect x="145" y="380" width="28" height="110" fill="#0c0b0d" />
-          <rect x="180" y="400" width="40" height="90" fill="#0a090b" />
-          <rect x="1048" y="400" width="42" height="90" fill="#0c0b0d" />
-          <rect x="1095" y="385" width="32" height="105" fill="#0d0c0e" />
-          <rect x="1132" y="412" width="52" height="78" fill="#0b0a0c" />
-          <rect x="1190" y="395" width="30" height="95" fill="#0c0b0d" />
-          <rect x="1226" y="406" width="54" height="84" fill="#0a090b" />
-          <!-- Tiny far-bg windows -->
-          <rect x="55" y="395" width="30" height="85" fill="url(#rwin-dim)" opacity=".5" />
-          <rect x="145" y="392" width="26" height="88" fill="url(#rwin-dim)" opacity=".4" />
-
-          <!-- ─── LEFT MAIN TOWER ─── -->
-          <!-- Body -->
-          <rect x="178" y="162" width="102" height="328" fill="#0d0c11" />
-          <!-- Upper section -->
-          <rect x="192" y="122" width="74" height="44" fill="#0e0d12" />
-          <!-- Antenna -->
-          <line x1="229" y1="94" x2="229" y2="124" stroke="#1a1820" stroke-width="3" />
-          <circle cx="229" cy="91" r="5" fill="#e0a040" opacity=".55" filter="url(#rf-bloom)" />
-          <!-- Windows full -->
-          <rect x="186" y="172" width="86" height="210" fill="url(#rwin-s)" opacity=".7" />
-          <!-- Darken some zones for realism -->
-          <rect x="186" y="172" width="86" height="55" fill="#0d0c11" opacity=".55" />
-          <rect x="220" y="242" width="28" height="44" fill="#0d0c11" opacity=".5" />
-          <rect x="186" y="318" width="40" height="32" fill="#0d0c11" opacity=".45" />
-          <!-- Bright highlight floor lines -->
-          <rect x="194" y="290" width="68" height="2.5" fill="#e0a040" opacity=".22" filter="url(#rf-soft)" />
-          <rect x="194" y="375" width="68" height="2.5" fill="#e0a040" opacity=".18" filter="url(#rf-soft)" />
-          <!-- Glass facade highlight -->
-          <rect x="240" y="162" width="18" height="290" fill="#c8a96e" opacity=".018" />
-
-          <!-- ─── CENTER HERO TOWER (iconic tapered) ─── -->
-          <polygon points="488,55 572,55 594,490 466,490" fill="#09080f" />
-          <!-- Windows -->
-          <rect x="476" y="76" width="108" height="390" fill="url(#rwin-m)" opacity=".62" />
-          <!-- Darken zones -->
-          <rect x="476" y="76" width="108" height="90" fill="#09080f" opacity=".72" />
-          <rect x="508" y="198" width="42" height="65" fill="#09080f" opacity=".5" />
-          <rect x="476" y="340" width="50" height="50" fill="#09080f" opacity=".45" />
-          <!-- Floor glow lines -->
-          <rect x="480" y="168" width="100" height="2" fill="#e0b060" opacity=".28" filter="url(#rf-soft)" />
-          <rect x="476" y="272" width="108" height="2" fill="#e0b060" opacity=".22" filter="url(#rf-soft)" />
-          <rect x="474" y="378" width="112" height="2" fill="#e0b060" opacity=".16" filter="url(#rf-soft)" />
-          <!-- Crown -->
-          <line x1="530" y1="36" x2="530" y2="57" stroke="#1c1a24" stroke-width="5" />
-          <circle cx="530" cy="33" r="6" fill="#e0c060" opacity=".7" filter="url(#rf-bloom)" />
-          <circle cx="530" cy="33" r="12" fill="#e0c060" opacity=".12" filter="url(#rf-bloom)" />
-          <!-- Tower glow -->
-          <ellipse cx="530" cy="280" rx="65" ry="220" fill="#c8a96e" opacity=".04" filter="url(#rf-blur)" />
-
-          <!-- ─── CENTER-RIGHT STEPPED BLOCK ─── -->
-          <!-- Step 3 (base) -->
-          <rect x="680" y="295" width="178" height="195" fill="#0e0d11" />
-          <!-- Step 2 -->
-          <rect x="706" y="238" width="126" height="62" fill="#0f0e12" />
-          <!-- Step 1 (top) -->
-          <rect x="726" y="185" width="86" height="56" fill="#100f13" />
-          <!-- Windows -->
-          <rect x="688" y="305" width="162" height="130" fill="url(#rwin-s)" opacity=".72" />
-          <rect x="714" y="246" width="110" height="48" fill="url(#rwin-s)" opacity=".68" />
-          <rect x="734" y="193" width="70" height="42" fill="url(#rwin-s)" opacity=".6" />
-          <!-- Terrace lines -->
-          <line x1="680" y1="295" x2="858" y2="295" stroke="#c8a96e" stroke-opacity=".14" stroke-width="1" />
-          <line x1="706" y1="238" x2="832" y2="238" stroke="#c8a96e" stroke-opacity=".11" stroke-width="1" />
-          <line x1="726" y1="185" x2="812" y2="185" stroke="#c8a96e" stroke-opacity=".09" stroke-width="1" />
-          <!-- Roof glow -->
-          <rect x="726" y="182" width="86" height="5" fill="#e0a040" opacity=".15" filter="url(#rf-soft)" />
-
-          <!-- ─── RIGHT SLIM TOWER ─── -->
-          <rect x="918" y="188" width="88" height="302" fill="#0d0c11" />
-          <rect x="930" y="152" width="64" height="40" fill="#0e0d12" />
-          <line x1="962" y1="130" x2="962" y2="154" stroke="#1a1820" stroke-width="3" />
-          <circle cx="962" cy="128" r="4" fill="#e0a040" opacity=".5" filter="url(#rf-bloom)" />
-          <rect x="926" y="198" width="72" height="192" fill="url(#rwin-s)" opacity=".65" />
-          <rect x="926" y="258" width="34" height="55" fill="#0d0c11" opacity=".52" />
-          <rect x="926" y="338" width="72" height="28" fill="#0d0c11" opacity=".4" />
-          <rect x="930" y="305" width="64" height="2.5" fill="#e0a040" opacity=".18" filter="url(#rf-soft)" />
-
-          <!-- ─── GROUND PLANE ─── -->
-          <rect x="0" y="490" width="1280" height="230" fill="url(#rground)" />
-          <line x1="0" y1="490" x2="1280" y2="490" stroke="#c8a96e" stroke-opacity=".09" stroke-width="1" />
-          <!-- Ground glow -->
-          <ellipse cx="530" cy="494" rx="460" ry="20" fill="#c8a96e" opacity=".07" filter="url(#rf-blur)" />
-
-          <!-- Ground reflections -->
-          <rect x="178" y="490" width="102" height="70" fill="url(#rwin-s)" opacity=".06" />
-          <rect x="178" y="490" width="102" height="70" fill="url(#rground)" opacity=".75" />
-          <rect x="918" y="490" width="88" height="55" fill="url(#rwin-s)" opacity=".05" />
-          <rect x="918" y="490" width="88" height="55" fill="url(#rground)" opacity=".8" />
-          <ellipse cx="530" cy="496" rx="80" ry="16" fill="#c8a96e" opacity=".05" />
-
-          <!-- Street line -->
-          <line x1="0" y1="535" x2="1280" y2="535" stroke="#181612" stroke-width="1" opacity=".6" />
-
-          <!-- Foreground trees -->
-          <ellipse cx="142" cy="482" rx="26" ry="20" fill="#040404" />
-          <rect x="140" y="482" width="4" height="28" fill="#050505" />
-          <ellipse cx="368" cy="485" rx="20" ry="16" fill="#040404" />
-          <rect x="366" y="485" width="3" height="22" fill="#050505" />
-          <ellipse cx="642" cy="480" rx="30" ry="24" fill="#040404" />
-          <rect x="640" y="480" width="4" height="30" fill="#050505" />
-          <ellipse cx="856" cy="483" rx="22" ry="18" fill="#040404" />
-          <rect x="854" y="483" width="3" height="24" fill="#050505" />
-          <ellipse cx="1145" cy="482" rx="28" ry="21" fill="#040404" />
-          <rect x="1143" y="482" width="4" height="26" fill="#050505" />
-
-          <!-- Street lamps -->
-          <rect x="305" y="456" width="2" height="36" fill="#1c1a18" opacity=".65" />
-          <circle cx="306" cy="454" r="5" fill="#e8b050" opacity=".5" filter="url(#rf-bloom)" />
-          <rect x="755" y="458" width="2" height="34" fill="#1c1a18" opacity=".65" />
-          <circle cx="756" cy="456" r="5" fill="#e8b050" opacity=".5" filter="url(#rf-bloom)" />
-          <rect x="1015" y="457" width="2" height="35" fill="#1c1a18" opacity=".65" />
-          <circle cx="1016" cy="455" r="5" fill="#e8b050" opacity=".5" filter="url(#rf-bloom)" />
-
-          <!-- Vignette -->
-          <rect width="1280" height="720" fill="url(#rcg3)" />
-        </svg>
-
-        <!-- Top bar -->
-        <div class="reel-topbar">
-          <div class="reel-live">
-            <div class="reel-live-dot"></div>
-            HD5 Studio
-          </div>
-          <div class="reel-top-right">D5 RENDER · 4K / 60FPS</div>
-        </div>
-
-        <!-- Play button -->
-        <button class="reel-play-btn" aria-label="Xem showreel" type="button">
-          <div class="reel-play-ring">
-            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
-              <path d="M9 6.5L20 13L9 19.5V6.5Z" fill="#c8a96e" />
-            </svg>
-          </div>
-        </button>
-
-        <!-- Bottom meta -->
-        <div class="reel-meta">
-          <div>
-            <div class="reel-meta-title">Showreel · HD5 Studio 2024</div>
-            <div class="reel-meta-sub">Architectural Visualization · D5 Render</div>
-          </div>
-          <div class="reel-badges">
-            <span class="reel-bdg reel-bdg-gold">4K</span>
-            <span class="reel-bdg reel-bdg-dim">3:42</span>
-            <span class="reel-bdg reel-bdg-dim">D5 Render</span>
-          </div>
-        </div>
-
-        <!-- Scrubber -->
-        <div class="reel-scrubber">
-          <div class="reel-scrubber-fill"></div>
-        </div>
-
-      </div>
-    </div>
 
     <div class="hero-stats rx d4">
       <div class="hs">
@@ -3367,21 +2963,18 @@
     document.getElementById('m360-btn-prev').addEventListener('click', () => pano360.prev())
     document.getElementById('m360-btn-next').addEventListener('click', () => pano360.next())
 
-    // Showreel — load YouTube ID từ Supabase site_config.showreel_video_id
+    // Showreel — inject YouTube iframe vào cinema screen
     fetch('/api/config').then(r => r.json()).then(cfg => {
       const ytId = cfg.showreel_video_id
-      if (ytId) {
-        const reel = document.querySelector('.hero-reel')
-        if (!reel) return
-        reel.dataset.youtubeId = ytId
-        // Update live badge
-        const liveEl = reel.querySelector('.reel-live')
-        if (liveEl) liveEl.innerHTML = '<div class="reel-live-dot"></div>SHOWREEL'
-        // Play button + card click → mở YouTube modal
-        const handler = (e) => { e.stopPropagation(); openYtModal(ytId) }
-        reel.querySelector('.reel-play-btn')?.addEventListener('click', handler)
-        reel.addEventListener('click', () => openYtModal(ytId))
-      }
+      if (!ytId) return
+      const screen = document.getElementById('cinema-screen')
+      if (!screen) return
+      screen.innerHTML = `<iframe
+        src="https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&loop=1&playlist=${ytId}&controls=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1"
+        allow="autoplay; encrypted-media"
+        allowfullscreen
+        title="HD5 Studio Showreel"
+      ></iframe>`
     }).catch(() => {})
 
     // Hero stats counter
