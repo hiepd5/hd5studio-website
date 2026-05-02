@@ -54,7 +54,7 @@
 
 ---
 
-## Trạng thái hiện tại — 2026-05-02
+## Trạng thái hiện tại — 2026-05-03
 
 ### ✅ Đã hoàn thành (session 1 — 2026-05-01)
 - `index.html` — landing page đầy đủ 11 sections
@@ -117,10 +117,21 @@
   - Avatar testimonials sửa đúng initial: H/K/L
   - Navbar buttons: class `.btn-sm` thay inline style
 
+### ✅ Đã hoàn thành (session 5 — 2026-05-03)
+- **Cinema tilt hero showreel** — thay `.hero-reel` card phẳng + SVG bằng màn hình nghiêng 3D kiểu chiếu rạp:
+  - `.cinema-wrap` với `perspective: 1400px` + `.cinema-stage` với `rotateX(10deg) rotateY(-2deg) scale(0.95)`
+  - YouTube iframe nhúng trực tiếp autoplay muted/loop, **không dùng modal** — video chạy ngay trong khung khi page load
+  - Vị trí: đầu hero section (trên label/h1), tức là ngay dưới navbar — visual đập vào mắt đầu tiên
+  - Xóa toàn bộ `.hero-reel` HTML (SVG city scene ~250 dòng) + CSS (~150 dòng) + JS handler cũ
+  - Glow vàng + reflection mờ bên dưới khung tạo hiệu ứng ánh sáng chiếu
+  - Hover: tilt giảm nhẹ `rotateX(6deg)` — responsive với chuột
+  - Responsive: 768px → 6°, 520px → 4° để tránh clip trên mobile
+- **Supabase `site_config`** — xác nhận field `showreel_video_id` chỉ lưu ID ngắn (vd `JACBxN3NTds`), không lưu full URL hay `&list=...`
+
 ### 🔲 Việc cần làm tiếp
 
 **[UNBLOCK — bạn tự làm]**
-- [ ] Kiểm tra `site_config` có row `key=showreel_video_id` chưa — paste YouTube ID vào
+- [ ] Supabase `site_config` → sửa `showreel_video_id` = chỉ ID ngắn (11 ký tự), bỏ `&list=...`
 - [ ] Upload ảnh cho `cong-vien-1` lên R2 → bật `active=true`
 - [ ] Thêm `video_id` cho các dự án khi có video YouTube
 
@@ -131,6 +142,7 @@
 **[MEDIUM]**
 - [ ] Favicon 32×32 + 192×192 (ảnh hưởng SEO + professional look)
 - [ ] Cập nhật `/add-project` command thêm trường `urls_360` và câu hỏi về ảnh 360°
+- [ ] Cinema screen fallback đẹp hơn khi chưa có YouTube ID (hiện là nền tối đơn giản)
 
 **[PHASE 2]**
 - [ ] Next.js 14 migration
@@ -141,10 +153,10 @@
 - **Supabase URL không có `/rest/v1/`** — SDK tự thêm path
 - **Slug R2 phải không dấu, gạch nối** — khoảng trắng gây 404
 - **service_role key** — luôn lấy dòng `eyJ...` trong Supabase Settings → API, không dùng publishable key
-- **Showreel ID trong Supabase** — `site_config.showreel_video_id`, thay trực tiếp trên Supabase không cần redeploy
+- **Showreel ID trong Supabase** — `site_config.showreel_video_id`, chỉ lưu 11 ký tự ID ngắn (không full URL, không `&list=...`), thay trực tiếp trên Supabase không cần redeploy
 - **`var(--dim)=#444` không dùng cho text** — tương phản quá thấp (~2.7:1), chỉ dùng `var(--muted)=#888` trở lên
 - **Slash commands `/add-project`** — dùng để thêm dự án mới, xuất SQL + R2 path sẵn, không viết tay
-- **Showreel dùng click-to-modal thay vì autoplay iframe** — YouTube autoplay iframe bị Chrome block khi không có user gesture trước đó; modal approach (openYtModal) đáng tin cậy hơn, không phụ thuộc autoplay policy
+- **Cinema showreel dùng autoplay muted iframe thay vì modal** — đặt ở đầu hero, video chạy nền khi load page; khác session 3 (dùng click-to-modal) vì cinema screen đặt ở vị trí visual hero nên autoplay muted phù hợp hơn; `pointer-events: none` trên iframe để không chặn scroll/tilt interaction
 - **Pannellum lazy load** — CDN JS (~150KB) chỉ load khi user click mở viewer lần đầu, không ảnh hưởng page load score
 - **Tour 360° dùng bảng `tour360` độc lập** — không dùng `portfolio.urls_360`; lý do: 360° là sản phẩm riêng biệt, có thể có dự án 360° không thuộc portfolio thường, quản lý tách biệt dễ hơn
 - **R2 CORS bắt buộc cho Pannellum** — `<img>` không cần CORS nhưng Pannellum dùng `XMLHttpRequest` để đọc binary → R2 phải có CORS policy cho phép domain production
