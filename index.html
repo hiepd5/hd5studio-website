@@ -1305,13 +1305,9 @@
     .lb-scroll-item.lb-item-loaded::after { display: none; }
     @keyframes lb-shimmer { to { background-position: -200% 0; } }
 
-    .lb-scroll-item {
-      aspect-ratio: 16/9;
-    }
     .lb-scroll-item img {
-      display: block; width: 100%; height: 100%;
-      object-fit: cover; object-position: center center;
-      opacity: 0; transition: opacity .4s ease; cursor: zoom-in;
+      display: block; width: 100%; height: auto;
+      opacity: 0; transition: opacity .4s ease;
     }
     .lb-scroll-item img.lb-loaded { opacity: 1; }
 
@@ -3013,7 +3009,6 @@
           img.onerror = () => { img.classList.add('lb-loaded'); item.classList.add('lb-item-loaded') }
           // First visible image loads immediately, rest lazy
           if (i === idx) { img.src = url } else { img.dataset.src = url }
-          img.addEventListener('click', () => this._openZoom(url, title, i))
           item.appendChild(img)
           scroll.appendChild(item)
           if (i !== idx) this._lazyObs.observe(item)
