@@ -1250,173 +1250,47 @@
     }
 
     .lb-wrap {
-      position: relative;
-      z-index: 1;
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      position: relative; z-index: 1;
+      width: 100vw; height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: stretch; justify-content: flex-start;
     }
 
-    .lb-img-container {
-      overflow: hidden;
-      max-width: 92vw;
-      max-height: 80vh;
-      border-radius: 8px;
-      cursor: zoom-in;
-      user-select: none;
-      position: relative;
-    }
-
-    .lb-img-container.zoomed { cursor: grab; }
-    .lb-img-container.dragging { cursor: grabbing; }
-
-    #lb-img.slide-out-left  { transform: translateX(-60px); opacity: 0; }
-    #lb-img.slide-out-right { transform: translateX(60px);  opacity: 0; }
-    #lb-img.slide-in-left   { transform: translateX(60px);  opacity: 0; }
-    #lb-img.slide-in-right  { transform: translateX(-60px); opacity: 0; }
-
-    #lb-img {
-      display: block;
-      max-width: 92vw;
-      max-height: 80vh;
-      object-fit: contain;
-      will-change: transform, opacity;
-      transition: opacity .3s, transform .32s cubic-bezier(.25, 1, .5, 1);
-      transform-origin: center center;
-      pointer-events: none;
-      user-select: none;
-    }
-
-    .lb-loading {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      color: var(--gold);
-      opacity: 0;
-      animation: lb-spin 1s linear infinite;
-    }
-
-    .lb-loading.visible { opacity: 1; }
-    @keyframes lb-spin { to { transform: rotate(360deg); } }
-
-    .lb-close {
-      position: absolute;
-      top: 16px;
-      right: 20px;
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.12);
-      color: #fff;
-      font-size: 20px;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background .2s;
-      line-height: 1;
-    }
-
-    .lb-close:hover { background: rgba(255,255,255,.16); }
-
-    .lb-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.12);
-      color: #fff;
-      font-size: 28px;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background .2s;
-    }
-
-    .lb-nav:hover { background: rgba(255,255,255,.16); }
-    .lb-nav[hidden] { display: none; }
-    .lb-prev { left: 16px; }
-    .lb-next { right: 16px; }
-
-    .lb-zoom-controls {
-      position: absolute;
-      top: 16px;
-      right: 72px;
-      display: flex;
-      gap: 8px;
-    }
-
-    .lb-zoom-btn {
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.12);
-      color: #fff;
-      font-size: 16px;
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background .2s;
-    }
-
-    .lb-zoom-btn:hover { background: rgba(255,255,255,.16); }
-
-    .lb-zoom-level {
-      position: absolute;
-      top: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 11px;
-      color: rgba(255,255,255,.4);
-      letter-spacing: .08em;
-      pointer-events: none;
-    }
-
-    .lb-meta {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 20px 24px;
-      background: linear-gradient(to top, rgba(0,0,0,.8) 0%, transparent 100%);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .lb-header {
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 68px 14px 24px;
+      background: rgba(8,8,8,.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255,255,255,.06);
       gap: 16px;
     }
-
+    .lb-header-right { display: flex; align-items: center; gap: 14px; }
     .lb-meta-info { display: flex; flex-direction: column; gap: 3px; }
+    .lb-meta-title { font-size: 14px; font-weight: 600; color: #fff; }
+    .lb-meta-cat { font-size: 11px; color: rgba(255,255,255,.5); }
+    .lb-counter { font-size: 11px; color: rgba(255,255,255,.4); letter-spacing: .08em; white-space: nowrap; }
 
-    .lb-meta-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: #fff;
+    .lb-scroll {
+      flex: 1; overflow-y: auto;
+      padding: 24px 0 80px;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 16px;
     }
+    .lb-scroll::-webkit-scrollbar { width: 4px; }
+    .lb-scroll::-webkit-scrollbar-track { background: transparent; }
+    .lb-scroll::-webkit-scrollbar-thumb { background: rgba(200,169,110,.3); border-radius: 4px; }
 
-    .lb-meta-cat {
-      font-size: 11px;
-      color: rgba(255,255,255,.5);
+    .lb-scroll-item {
+      width: 92vw; max-width: 1100px;
+      position: relative;
     }
-
-    .lb-counter {
-      font-size: 11px;
-      color: rgba(255,255,255,.4);
-      letter-spacing: .08em;
-      white-space: nowrap;
+    .lb-scroll-item img {
+      display: block; width: 100%; height: auto;
+      border-radius: 8px;
+      opacity: 0; transition: opacity .4s ease;
     }
+    .lb-scroll-item img.lb-loaded { opacity: 1; }
 
     .lb-play-yt {
       background: var(--gold);
@@ -1431,7 +1305,6 @@
       white-space: nowrap;
       transition: opacity .2s;
     }
-
     .lb-play-yt:hover { opacity: .85; }
 
     /* ═══════════════════════════════════════
@@ -2039,11 +1912,9 @@
         grid-column: span 1;
       }
 
-      .lb-nav { display: none; }
-      .lb-meta { flex-wrap: wrap; gap: 10px; }
-      .lb-zoom-controls { right: 56px; }
-      #lb-img { max-width: 100vw; max-height: 75vh; }
-      .lb-img-container { max-width: 100vw; max-height: 75vh; border-radius: 0; }
+      .lb-scroll-item { width: 100vw; }
+      .lb-scroll-item img { border-radius: 0; }
+      .lb-header { padding: 12px 60px 12px 16px; }
       .yt-frame-wrap { width: 100vw; }
 
       .tour360-grid { grid-template-columns: 1fr; }
@@ -2502,25 +2373,17 @@
     <div class="lb-backdrop" id="lb-backdrop"></div>
     <div class="lb-wrap">
       <button class="lb-close" id="lb-close" aria-label="Đóng lightbox">✕</button>
-      <button class="lb-nav lb-prev" id="lb-prev" aria-label="Ảnh trước">‹</button>
-      <button class="lb-nav lb-next" id="lb-next" aria-label="Ảnh sau">›</button>
-      <div class="lb-zoom-controls">
-        <button class="lb-zoom-btn" id="lb-zoom-out" aria-label="Thu nhỏ">−</button>
-        <button class="lb-zoom-btn" id="lb-zoom-in" aria-label="Phóng to">+</button>
-      </div>
-      <span class="lb-zoom-level" id="lb-zoom-level">100%</span>
-      <div class="lb-img-container" id="lb-img-container">
-        <img id="lb-img" src="" alt="" draggable="false">
-        <div class="lb-loading" id="lb-loading">↻</div>
-      </div>
-      <div class="lb-meta">
+      <div class="lb-header">
         <div class="lb-meta-info">
           <span class="lb-meta-title" id="lb-title"></span>
           <span class="lb-meta-cat" id="lb-category"></span>
         </div>
-        <span class="lb-counter" id="lb-counter"></span>
-        <button class="lb-play-yt" id="lb-play-yt" hidden>▶ Xem video</button>
+        <div class="lb-header-right">
+          <span class="lb-counter" id="lb-counter"></span>
+          <button class="lb-play-yt" id="lb-play-yt" hidden>▶ Xem video</button>
+        </div>
       </div>
+      <div class="lb-scroll" id="lb-scroll"></div>
     </div>
   </div>
 
@@ -2971,141 +2834,72 @@
     }
 
     // ══════════════════════════════
-    // LIGHTBOX — zoom + pan + slideshow
+    // LIGHTBOX — vertical scroll gallery
     // ══════════════════════════════
     const lb = {
-      images: [], index: 0, scale: 1,
-      panX: 0, panY: 0, startX: 0, startY: 0, isDragging: false,
-      videoId: '',
+      videoId: '', _observer: null,
 
       open(urls, idx, title, category, videoId) {
-        this.images = urls; this.index = idx; this.scale = 1
-        this.panX = 0; this.panY = 0; this.videoId = videoId || ''
+        this.videoId = videoId || ''
         document.getElementById('lb-title').textContent = title
-        document.getElementById('lb-category').textContent = (category || '') + (urls.length > 1 && urls[0] !== urls[0].replace('thumb','full') ? ' · 4K' : '')
+        document.getElementById('lb-category').textContent = category || ''
         const ytBtn = document.getElementById('lb-play-yt')
         ytBtn.hidden = !videoId
         if (videoId) ytBtn.onclick = () => { this.close(); openYtModal(videoId) }
+
+        const scroll = document.getElementById('lb-scroll')
+        scroll.innerHTML = ''
+        urls.forEach((url, i) => {
+          const item = document.createElement('div')
+          item.className = 'lb-scroll-item'
+          item.dataset.index = i
+          const img = document.createElement('img')
+          img.alt = `${title} — ảnh ${i + 1}`
+          img.src = url
+          img.onload = () => img.classList.add('lb-loaded')
+          img.onerror = () => img.classList.add('lb-loaded')
+          item.appendChild(img)
+          scroll.appendChild(item)
+        })
+
         document.getElementById('img-lightbox').removeAttribute('hidden')
         document.body.style.overflow = 'hidden'
-        this.loadImage(idx)
-        this.updateNav()
-      },
+        this._setupCounter(scroll, urls.length)
 
-      loadImage(idx) {
-        const img = document.getElementById('lb-img')
-        const loading = document.getElementById('lb-loading')
-        img.style.opacity = '0'
-        loading.classList.add('visible')
-        this.scale = 1; this.panX = 0; this.panY = 0
-        this.applyTransform()
-        document.getElementById('lb-zoom-level').textContent = '100%'
-        img.src = this.images[idx]
-        img.alt = this.title ? `${this.title} — ảnh ${idx + 1}` : ''
-        img.onload = () => {
-          img.style.opacity = '1'
-          loading.classList.remove('visible')
+        if (idx > 0) {
+          requestAnimationFrame(() => {
+            scroll.querySelectorAll('.lb-scroll-item')[idx]?.scrollIntoView({ behavior: 'instant' })
+          })
         }
-        img.onerror = () => { loading.classList.remove('visible') }
-        const total = this.images.length
-        document.getElementById('lb-counter').textContent = total > 1 ? `${idx + 1} / ${total}` : ''
       },
 
-      slideTo(newIdx, dir) {
-        const img = document.getElementById('lb-img')
-        const outClass = dir > 0 ? 'slide-out-left' : 'slide-out-right'
-        const inClass  = dir > 0 ? 'slide-in-left'  : 'slide-in-right'
-        img.classList.add(outClass)
-        setTimeout(() => {
-          img.classList.remove(outClass)
-          img.classList.add(inClass)
-          this.index = newIdx
-          this.loadImage(this.index)
-          requestAnimationFrame(() => requestAnimationFrame(() => img.classList.remove(inClass)))
-        }, 180)
-      },
-      prev() { if (this.images.length < 2) return; this.slideTo((this.index - 1 + this.images.length) % this.images.length, -1) },
-      next() { if (this.images.length < 2) return; this.slideTo((this.index + 1) % this.images.length, 1) },
-
-      updateNav() {
-        const multi = this.images.length > 1
-        document.getElementById('lb-prev').hidden = !multi
-        document.getElementById('lb-next').hidden = !multi
-      },
-
-      zoom(delta) {
-        this.scale = Math.min(4, Math.max(1, this.scale + delta))
-        if (this.scale === 1) { this.panX = 0; this.panY = 0 }
-        this.applyTransform()
-        document.getElementById('lb-zoom-level').textContent = Math.round(this.scale * 100) + '%'
-        const c = document.getElementById('lb-img-container')
-        c.classList.toggle('zoomed', this.scale > 1)
-      },
-
-      applyTransform() {
-        document.getElementById('lb-img').style.transform =
-          `scale(${this.scale}) translate(${this.panX / this.scale}px, ${this.panY / this.scale}px)`
+      _setupCounter(scroll, total) {
+        if (this._observer) this._observer.disconnect()
+        document.getElementById('lb-counter').textContent = total > 1 ? `1 / ${total}` : ''
+        if (total <= 1) return
+        this._observer = new IntersectionObserver(entries => {
+          entries.forEach(e => {
+            if (e.isIntersecting)
+              document.getElementById('lb-counter').textContent =
+                `${+e.target.dataset.index + 1} / ${total}`
+          })
+        }, { root: scroll, threshold: 0.5 })
+        scroll.querySelectorAll('.lb-scroll-item').forEach(el => this._observer.observe(el))
       },
 
       close() {
+        if (this._observer) { this._observer.disconnect(); this._observer = null }
         document.getElementById('img-lightbox').setAttribute('hidden', '')
         document.body.style.overflow = ''
-        document.getElementById('lb-img').src = ''
-        this.scale = 1; this.panX = 0; this.panY = 0
+        document.getElementById('lb-scroll').innerHTML = ''
       }
     }
 
-    // Lightbox buttons
     document.getElementById('lb-close').addEventListener('click', () => lb.close())
     document.getElementById('lb-backdrop').addEventListener('click', () => lb.close())
-    document.getElementById('lb-prev').addEventListener('click', () => lb.prev())
-    document.getElementById('lb-next').addEventListener('click', () => lb.next())
-    document.getElementById('lb-zoom-in').addEventListener('click', () => lb.zoom(0.5))
-    document.getElementById('lb-zoom-out').addEventListener('click', () => lb.zoom(-0.5))
-
-    // Keyboard navigation
     document.addEventListener('keydown', e => {
-      if (document.getElementById('img-lightbox').hasAttribute('hidden')) return
-      if (e.key === 'Escape') lb.close()
-      if (e.key === 'ArrowLeft') lb.prev()
-      if (e.key === 'ArrowRight') lb.next()
-      if (e.key === '+' || e.key === '=') lb.zoom(0.5)
-      if (e.key === '-') lb.zoom(-0.5)
-    })
-
-    // Mouse drag to pan + touch swipe (shared lbContainer)
-    const lbContainer = document.getElementById('lb-img-container')
-    let touchStartX = 0, touchStartY = 0
-    lbContainer.addEventListener('touchstart', e => {
-      touchStartX = e.touches[0].clientX
-      touchStartY = e.touches[0].clientY
-    }, { passive: true })
-    lbContainer.addEventListener('touchend', e => {
-      const dx = e.changedTouches[0].clientX - touchStartX
-      const dy = e.changedTouches[0].clientY - touchStartY
-      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
-        if (dx < 0) lb.next(); else lb.prev()
-      }
-    }, { passive: true })
-
-    // Scroll wheel zoom
-    lbContainer.addEventListener('wheel', e => {
-      e.preventDefault()
-      lb.zoom(e.deltaY < 0 ? 0.4 : -0.4)
-    }, { passive: false })
-    lbContainer.addEventListener('mousedown', e => {
-      if (lb.scale <= 1) return
-      lb.isDragging = true; lb.startX = e.clientX - lb.panX; lb.startY = e.clientY - lb.panY
-      lbContainer.classList.add('dragging')
-    })
-    document.addEventListener('mousemove', e => {
-      if (!lb.isDragging) return
-      lb.panX = e.clientX - lb.startX; lb.panY = e.clientY - lb.startY
-      lb.applyTransform()
-    })
-    document.addEventListener('mouseup', () => {
-      lb.isDragging = false
-      lbContainer.classList.remove('dragging')
+      if (!document.getElementById('img-lightbox').hasAttribute('hidden') && e.key === 'Escape')
+        lb.close()
     })
 
     // ══════════════════════════════
