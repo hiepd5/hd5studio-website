@@ -1295,23 +1295,10 @@
     .lb-scroll-item {
       width: 100%; position: relative;
       background: #0d0d0d;
-      min-height: 40vh;
-      display: flex; align-items: center; justify-content: center;
       border-bottom: 1px solid #1a1a1a;
     }
-    .lb-scroll-item::after {
-      content: ""; position: absolute; inset: 0;
-      background: linear-gradient(90deg,transparent 25%,rgba(255,255,255,.04) 50%,transparent 75%);
-      background-size: 200% 100%;
-      animation: lb-shimmer 1.4s infinite;
-      pointer-events: none;
-    }
-    .lb-scroll-item.lb-item-loaded::after { display: none; }
-    @keyframes lb-shimmer { to { background-position: -200% 0; } }
-
     .lb-scroll-item img {
       display: block; width: 100%; height: auto;
-      max-height: 90vh; object-fit: contain;
       opacity: 0; transition: opacity .4s ease;
     }
     .lb-scroll-item img.lb-loaded { opacity: 1; }
