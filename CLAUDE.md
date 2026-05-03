@@ -55,7 +55,7 @@
 
 ---
 
-## Trạng thái hiện tại — 2026-05-04 (cập nhật session 7)
+## Trạng thái hiện tại — 2026-05-04 (cập nhật session 8)
 
 ### ✅ Đã hoàn thành (session 1 — 2026-05-01)
 - `index.html` — landing page đầy đủ 11 sections
@@ -158,6 +158,26 @@
 - **Lightbox v3 — ảnh full tự nhiên** — bỏ `aspect-ratio: 16/9` + `object-fit: cover`, ảnh hiển thị `width: 100%; height: auto` — xem toàn bộ render không cần click zoom
 - **Fix ảnh chồng nhau desktop** — xóa `display: flex` + `object-fit: contain` xung đột nhau, đơn giản hóa CSS về `display: block; width: 100%; height: auto`
 
+### ✅ Đã hoàn thành (session 8 — 2026-05-04)
+- **Trust bar** — thay 8 tên placeholder bằng khách hàng thật: Fly Media, Archivina JSC, C.A.T Hanoi Company, Danko Group, VNC Ocean Park, Eagle Land, Stavian Land, MIK Group
+- **Hero showreel chất lượng 1440p desktop** — `vq=hd1440` trên desktop, `vq=hd1080` trên mobile (≤768px)
+- **Nút unmute/mute hero showreel** — button overlay góc dưới phải video, dùng YouTube `postMessage API` (`enablejsapi=1`) toggle mute/unmute không cần reload iframe; icon SVG đổi giữa muted/unmuted state
+- **Nhạc nền lightbox + 360°** — `audioMgr` object với fade in/out 800ms, 2 track MP3 từ R2:
+  - `audio/lightbox-ambient.mp3` — phát khi mở lightbox portfolio
+  - `audio/tour360-ambient.mp3` — phát khi mở 360° viewer
+  - Nút 🔊/🔇 nổi góc dưới phải, chỉ hiện khi đang phát nhạc
+  - Cross-fade tự động khi chuyển giữa lightbox và 360°
+- **Fix race condition audio** — chuyển `<audio>` + `#audio-mute-btn` lên trước `<script>audioMgr.init()</script>` riêng để đảm bảo DOM ready
+- **Fix CSS comment YouTube Modal** — thêm `/*` mở đầu bị thiếu → không còn CSS parse error
+- **Fix hero h1 font-size** — `clamp(36px,5vw,72px)` → `clamp(42px,5.5vw,80px)` đúng design spec
+- **Testimonials thật** — 3 khách hàng thật: Tuấn Trần (Fly Media), Bùi Ngọc Lâm (Archivina JSC), Phạm Thị Lan Anh (VNC Ocean Park). 100K view thay vì 500K
+- **Nội dung chỉnh sửa đồng bộ:**
+  - "48h" → "72h" đồng bộ 4 chỗ: hero stats counter, feature list, KPI Standard, dashboard avg
+  - "Giao hàng chuẩn" → "Giao hàng từ 3 ngày"
+  - "Post-processing trong Lightroom" → "Post-processing trong D5 Render"
+  - "Revision không giới hạn đến khi ưng ý" → "Hỗ trợ chỉnh sửa trong phạm vi yêu cầu ban đầu"
+- **Xóa section Feature 2 (Tốc độ/Dashboard)** — bỏ hoàn toàn section "Giao hàng nhanh, không để bạn chờ" (-88 dòng) để trang tập trung vào sản phẩm
+
 ### 🔲 Việc cần làm tiếp
 
 **[UNBLOCK — bạn tự làm]**
@@ -167,12 +187,12 @@
 - [ ] Thêm `video_id` cho các dự án khi có video YouTube
 
 **[HIGH]**
-- [ ] Testimonials — thay 3 quote placeholder bằng nội dung thật (tên, chức vụ, công ty)
 - [ ] Footer — thêm email liên hệ, địa chỉ studio
+- [ ] Favicon 32×32 + 192×192 (ảnh hưởng SEO + professional look)
 
 **[MEDIUM]**
-- [ ] Favicon 32×32 + 192×192 (ảnh hưởng SEO + professional look)
-- [ ] Cập nhật `/add-project` command thêm trường `urls_360` và câu hỏi về ảnh 360°
+- [ ] Thay khung "D5 Render Settings" (Feature 1) bằng ảnh/animation 3 giai đoạn quy trình render — đang thảo luận hướng triển khai
+- [ ] Cập nhật `/add-project` command thêm trường `urls_360`
 
 **[PHASE 2]**
 - [ ] Next.js 14 migration
@@ -206,3 +226,9 @@
 - **Film strip thumbnail không hiệu quả cho portfolio kiến trúc** — thử tilt -5° gây lag vì CSS transform trên nhiều phần tử cùng lúc; bỏ tilt rồi bỏ luôn strip vì không thêm giá trị khi ảnh đã cuộn dọc liên tục; quyết định: lightbox chỉ cần header + scroll đơn giản
 - **Lightbox ảnh full `height: auto` thay vì crop 16:9** — ảnh render kiến trúc có tỉ lệ đa dạng (panorama, portrait, standard); crop 16:9 cắt mất nội dung; user muốn xem toàn bộ ảnh không cần click; `display: block; width: 100%; height: auto` là CSS đơn giản nhất và đúng nhất
 - **Tránh kết hợp `display: flex` + `object-fit: contain` + `height: auto`** — ba thuộc tính này xung đột nhau: `object-fit` chỉ hoạt động khi cả width lẫn height được set cứng; khi dùng `height: auto` thì `object-fit` vô nghĩa; `flex` làm container không tính height đúng từ img; kết quả: ảnh chồng nhau trên desktop. Giải pháp: bỏ hết, dùng `display: block` thuần túy
+- **YouTube unmute dùng postMessage thay vì src rebuild** — thay đổi `mute=1` trong src sẽ reload toàn bộ iframe (video restart); `postMessage({func:'unMute'})` toggle tiếng ngay lập tức không gián đoạn; yêu cầu thêm `enablejsapi=1` vào embed URL
+- **Audio phát khi mở lightbox/360° thay vì autoplay hero** — browser chặn audio autoplay khi chưa có user interaction; lightbox/360° là user-initiated action (click) nên audio được phép phát; không cần consent riêng
+- **`audioMgr.init()` phải chạy sau khi `#audio-mute-btn` có trong DOM** — đặt `<audio>` + `<button id="audio-mute-btn">` TRƯỚC `<script>audioMgr.init()</script>`; nếu ngược lại `this._btn = null` và button mute không hoạt động
+- **Xóa Feature 2 (Tốc độ) thay vì giữ** — section dashboard mockup (The Manor Central Park, Biệt thự Phú Quốc...) là nội dung giả, không thuyết phục; user muốn tập trung vào sản phẩm thật; quyết định: bỏ hẳn, không thay thế
+- **Content testimonials dùng số thực tế** — 100K view (không phải 500K) để credible hơn; tên/công ty khớp với trust bar (Fly Media, Archivina JSC, VNC Ocean Park)
+- **Giao hàng "từ 3 ngày" thay vì "48h"** — 48h không thực tế cho mọi dự án; "từ 3 ngày" (72h) trung thực hơn và tránh kỳ vọng sai; đồng bộ toàn bộ 4 chỗ trong trang
