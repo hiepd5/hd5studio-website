@@ -1232,37 +1232,29 @@
      LIGHTBOX
   ═══════════════════════════════════════ */
     #img-lightbox {
-      position: fixed;
-      inset: 0;
-      z-index: 900;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: fixed; inset: 0; z-index: 900;
+      opacity: 0; transition: opacity .22s ease;
+      pointer-events: none;
     }
-
+    #img-lightbox.lb-open { opacity: 1; pointer-events: auto; }
     #img-lightbox[hidden] { display: none; }
 
     .lb-backdrop {
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,.95);
-      backdrop-filter: blur(10px);
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,.96); backdrop-filter: blur(12px);
     }
 
     .lb-close {
       position: absolute;
-      top: 10px; right: 14px; z-index: 20;
+      top: max(10px, env(safe-area-inset-top)); right: 14px; z-index: 20;
       display: flex; align-items: center; gap: 6px;
-      background: rgba(255,255,255,.1);
-      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18);
       color: #fff; font-size: 13px; font-weight: 600;
-      padding: 7px 14px 7px 10px;
-      border-radius: 20px; cursor: pointer;
-      transition: background .2s;
-      white-space: nowrap;
+      padding: 7px 14px 7px 10px; border-radius: 20px; cursor: pointer;
+      transition: background .2s; white-space: nowrap;
     }
     .lb-close:hover { background: rgba(255,255,255,.2); }
-    .lb-close::before { content: '✕'; font-size: 11px; opacity: .7; }
+    .lb-close::before { content: "\2715"; font-size: 11px; opacity: .7; margin-right: 2px; }
 
     .lb-wrap {
       position: relative; z-index: 1;
@@ -1274,102 +1266,129 @@
     .lb-header {
       flex-shrink: 0;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 68px 14px 24px;
-      background: rgba(8,8,8,.92);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid rgba(255,255,255,.06);
-      gap: 16px;
+      padding: 14px 100px 14px 24px;
+      background: rgba(8,8,8,.92); backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255,255,255,.06); gap: 16px;
     }
     .lb-header-right { display: flex; align-items: center; gap: 14px; }
     .lb-meta-info { display: flex; flex-direction: column; gap: 3px; }
     .lb-meta-title { font-size: 14px; font-weight: 600; color: #fff; }
     .lb-meta-cat { font-size: 11px; color: rgba(255,255,255,.5); }
-    .lb-counter { font-size: 11px; color: rgba(255,255,255,.4); letter-spacing: .08em; white-space: nowrap; }
+    .lb-counter {
+      font-size: 12px; font-weight: 600; color: var(--gold);
+      letter-spacing: .06em; white-space: nowrap;
+      background: rgba(200,169,110,.1); border: 1px solid rgba(200,169,110,.2);
+      padding: 3px 10px; border-radius: 12px;
+    }
 
     .lb-scroll {
       flex: 1; overflow-y: auto;
-      padding: 6px 0 60px;
+      padding: 4px 0 80px;
       display: flex; flex-direction: column;
-      align-items: center; gap: 6px;
+      align-items: center; gap: 4px;
     }
     .lb-scroll::-webkit-scrollbar { width: 4px; }
     .lb-scroll::-webkit-scrollbar-track { background: transparent; }
     .lb-scroll::-webkit-scrollbar-thumb { background: rgba(200,169,110,.3); border-radius: 4px; }
 
-    .lb-scroll-item { width: 100vw; position: relative; }
+    .lb-scroll-item {
+      width: 100vw; position: relative;
+      background: #111; overflow: hidden;
+    }
+    .lb-scroll-item::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(90deg,transparent 25%,rgba(255,255,255,.04) 50%,transparent 75%);
+      background-size: 200% 100%;
+      animation: lb-shimmer 1.4s infinite;
+    }
+    .lb-scroll-item.lb-item-loaded::after { display: none; }
+    @keyframes lb-shimmer { to { background-position: -200% 0; } }
+
     .lb-scroll-item img {
       display: block; width: 100%; height: auto;
-      opacity: 0; transition: opacity .4s ease;
+      opacity: 0; transition: opacity .4s ease; cursor: zoom-in;
     }
     .lb-scroll-item img.lb-loaded { opacity: 1; }
 
-    /* Project switcher panel */
+    .lb-nav-arrow {
+      position: fixed; top: 50%; z-index: 15;
+      transform: translateY(-50%);
+      width: 48px; height: 80px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
+      color: #fff; font-size: 28px;
+      cursor: pointer; border-radius: 6px;
+      transition: background .2s, opacity .2s; opacity: 0.5;
+    }
+    .lb-nav-arrow:hover { background: rgba(255,255,255,.15); opacity: 1; }
+    .lb-nav-prev { left: 8px; }
+    .lb-nav-next { right: 8px; }
+
+    .lb-zoom-overlay {
+      position: fixed; inset: 0; z-index: 30;
+      background: rgba(0,0,0,.97);
+      display: flex; align-items: center; justify-content: center;
+      cursor: zoom-out;
+    }
+    .lb-zoom-overlay[hidden] { display: none; }
+    .lb-zoom-overlay img { max-width: 96vw; max-height: 96vh; object-fit: contain; border-radius: 4px; }
+    .lb-zoom-close {
+      position: absolute; top: 16px; right: 16px;
+      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
+      color: #fff; font-size: 20px; width: 40px; height: 40px;
+      border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+
     .lb-proj-btn {
       display: flex; align-items: center; gap: 7px;
-      background: rgba(200,169,110,.12);
-      border: 1px solid rgba(200,169,110,.3);
-      color: var(--gold);
-      font-size: 12px; font-weight: 600; letter-spacing: .04em;
+      background: rgba(200,169,110,.12); border: 1px solid rgba(200,169,110,.3);
+      color: var(--gold); font-size: 12px; font-weight: 600; letter-spacing: .04em;
       padding: 6px 14px; border-radius: 20px; cursor: pointer;
-      transition: background .2s;
-      white-space: nowrap;
+      transition: background .2s; white-space: nowrap;
     }
     .lb-proj-btn:hover { background: rgba(200,169,110,.22); }
 
     .lb-projects {
       position: absolute; inset: 0; z-index: 10;
-      background: rgba(4,3,10,.97);
-      backdrop-filter: blur(12px);
+      background: rgba(4,3,10,.97); backdrop-filter: blur(12px);
       display: flex; flex-direction: column;
-      overflow-y: auto;
-      padding: 20px;
+      overflow-y: auto; padding: 60px 20px 20px;
     }
     .lb-projects[hidden] { display: none; }
     .lb-projects-title {
       font-size: 11px; font-weight: 600; letter-spacing: .1em;
-      text-transform: uppercase; color: var(--gold);
-      margin-bottom: 20px;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 20px;
     }
-    .lb-proj-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 12px;
-    }
+    .lb-proj-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(180px,1fr)); gap: 12px; }
     .lb-proj-card {
       cursor: pointer; border-radius: 8px; overflow: hidden;
-      border: 2px solid transparent;
-      transition: border-color .2s, transform .2s;
+      border: 2px solid transparent; transition: border-color .2s, transform .2s;
     }
     .lb-proj-card:hover { transform: translateY(-2px); border-color: rgba(200,169,110,.4); }
     .lb-proj-card.active { border-color: var(--gold); }
     .lb-proj-card img { display: block; width: 100%; aspect-ratio: 4/3; object-fit: cover; }
     .lb-proj-card-name {
-      padding: 8px 10px;
-      background: rgba(255,255,255,.04);
+      padding: 8px 10px; background: rgba(255,255,255,.04);
       font-size: 11px; font-weight: 600; color: #fff;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
 
-    @media (max-width: 768px) {
-      .lb-proj-grid { grid-template-columns: repeat(2, 1fr); }
-      .lb-header { padding: 12px 60px 12px 16px; }
-    }
-
     .lb-play-yt {
-      background: var(--gold);
-      border: none;
-      color: #000;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .06em;
-      padding: 7px 14px;
-      border-radius: 6px;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: opacity .2s;
+      background: var(--gold); border: none; color: #000;
+      font-size: 11px; font-weight: 700; letter-spacing: .06em;
+      padding: 7px 14px; border-radius: 6px; cursor: pointer;
+      white-space: nowrap; transition: opacity .2s;
     }
     .lb-play-yt:hover { opacity: .85; }
 
-    /* ═══════════════════════════════════════
+    @media (max-width: 768px) {
+      .lb-nav-arrow { display: none; }
+      .lb-proj-grid { grid-template-columns: repeat(2,1fr); }
+      .lb-header { padding: 12px 60px 12px 16px; }
+    }
+
+    ═══
      YOUTUBE MODAL
   ═══════════════════════════════════════ */
     #yt-modal {
@@ -2429,12 +2448,14 @@
   </div>
 
   <!-- Lightbox -->
-  <div id="img-lightbox" hidden>
+  <div id="img-lightbox" hidden role="dialog" aria-modal="true" aria-labelledby="lb-title">
     <div class="lb-backdrop" id="lb-backdrop"></div>
     <div class="lb-wrap">
-      <button class="lb-close" id="lb-close" aria-label="Đóng — trở về trang chủ">Trở về</button>
+      <button class="lb-close" id="lb-close" aria-label="Dong - tro ve trang chu">Tro ve</button>
+      <button class="lb-nav-arrow lb-nav-prev" id="lb-nav-prev" aria-label="Anh truoc">&#8249;</button>
+      <button class="lb-nav-arrow lb-nav-next" id="lb-nav-next" aria-label="Anh sau">&#8250;</button>
       <div class="lb-header">
-        <button class="lb-proj-btn" id="lb-proj-btn" aria-label="Chọn dự án khác">← Dự án</button>
+        <button class="lb-proj-btn" id="lb-proj-btn" aria-label="Chon du an khac">← Dự án</button>
         <div class="lb-meta-info">
           <span class="lb-meta-title" id="lb-title"></span>
           <span class="lb-meta-cat" id="lb-category"></span>
@@ -2445,11 +2466,14 @@
         </div>
       </div>
       <div class="lb-scroll" id="lb-scroll"></div>
-      <!-- Project switcher panel -->
       <div class="lb-projects" id="lb-projects" hidden>
         <p class="lb-projects-title">Chọn dự án</p>
         <div class="lb-proj-grid" id="lb-proj-grid"></div>
       </div>
+    </div>
+    <div class="lb-zoom-overlay" id="lb-zoom-overlay" hidden>
+      <button class="lb-zoom-close" id="lb-zoom-close" aria-label="Dong phong to">✕</button>
+      <img id="lb-zoom-img" src="" alt="">
     </div>
   </div>
 
@@ -2903,38 +2927,59 @@
     }
 
     // ══════════════════════════════
-    // LIGHTBOX — vertical scroll gallery
+    // LIGHTBOX — vertical scroll gallery v2
     // ══════════════════════════════
     const lb = {
-      videoId: '', _title: '', _observer: null,
+      _urls: [], _idx: 0, _title: '', _observer: null, _lazyObs: null,
 
       open(urls, idx, title, category, videoId) {
-        this.videoId = videoId || ''; this._title = title
+        this._urls = urls; this._idx = idx; this._title = title
         document.getElementById('lb-title').textContent = title
         document.getElementById('lb-category').textContent = category || ''
         const ytBtn = document.getElementById('lb-play-yt')
         ytBtn.hidden = !videoId
         if (videoId) ytBtn.onclick = () => { this.close(); openYtModal(videoId) }
         document.getElementById('lb-projects').setAttribute('hidden', '')
+        document.getElementById('lb-zoom-overlay').setAttribute('hidden', '')
 
+        // Build items with lazy load
         const scroll = document.getElementById('lb-scroll')
         scroll.innerHTML = ''
+        if (this._lazyObs) this._lazyObs.disconnect()
+        this._lazyObs = new IntersectionObserver(entries => {
+          entries.forEach(e => {
+            if (!e.isIntersecting) return
+            const img = e.target.querySelector('img[data-src]')
+            if (img) { img.src = img.dataset.src; delete img.dataset.src }
+            this._lazyObs.unobserve(e.target)
+          })
+        }, { root: scroll, rootMargin: '200px' })
+
         urls.forEach((url, i) => {
           const item = document.createElement('div')
           item.className = 'lb-scroll-item'
           item.dataset.index = i
           const img = document.createElement('img')
           img.alt = `${title} — ảnh ${i + 1}`
-          img.src = url
-          img.onload = () => img.classList.add('lb-loaded')
-          img.onerror = () => img.classList.add('lb-loaded')
+          img.onload = () => { img.classList.add('lb-loaded'); item.classList.add('lb-item-loaded') }
+          img.onerror = () => { img.classList.add('lb-loaded'); item.classList.add('lb-item-loaded') }
+          // First visible image loads immediately, rest lazy
+          if (i === idx) { img.src = url } else { img.dataset.src = url }
+          img.addEventListener('click', () => this._openZoom(url, title, i))
           item.appendChild(img)
           scroll.appendChild(item)
+          if (i !== idx) this._lazyObs.observe(item)
         })
 
-        document.getElementById('img-lightbox').removeAttribute('hidden')
+        // Show lightbox with fade-in
+        const lb_el = document.getElementById('img-lightbox')
+        lb_el.removeAttribute('hidden')
+        requestAnimationFrame(() => lb_el.classList.add('lb-open'))
         document.body.style.overflow = 'hidden'
+        document.getElementById('lb-close').focus()
+
         this._setupCounter(scroll, urls.length)
+        this._updateArrows()
 
         if (idx > 0) {
           requestAnimationFrame(() => {
@@ -2949,12 +2994,35 @@
         if (total <= 1) return
         this._observer = new IntersectionObserver(entries => {
           entries.forEach(e => {
-            if (e.isIntersecting)
-              document.getElementById('lb-counter').textContent =
-                `${+e.target.dataset.index + 1} / ${total}`
+            if (e.isIntersecting) {
+              this._idx = +e.target.dataset.index
+              document.getElementById('lb-counter').textContent = `${this._idx + 1} / ${total}`
+              this._updateArrows()
+            }
           })
-        }, { root: scroll, threshold: 0.5 })
+        }, { root: scroll, rootMargin: '-10% 0px -89% 0px', threshold: 0 })
         scroll.querySelectorAll('.lb-scroll-item').forEach(el => this._observer.observe(el))
+      },
+
+      _updateArrows() {
+        const total = this._urls.length
+        document.getElementById('lb-nav-prev').style.opacity = this._idx > 0 ? '0.7' : '0.2'
+        document.getElementById('lb-nav-next').style.opacity = this._idx < total - 1 ? '0.7' : '0.2'
+      },
+
+      scrollTo(idx) {
+        const scroll = document.getElementById('lb-scroll')
+        const items = scroll.querySelectorAll('.lb-scroll-item')
+        if (idx < 0 || idx >= items.length) return
+        items[idx].scrollIntoView({ behavior: 'smooth' })
+      },
+
+      _openZoom(url, title, i) {
+        const overlay = document.getElementById('lb-zoom-overlay')
+        const img = document.getElementById('lb-zoom-img')
+        img.src = url
+        img.alt = `${title} — ảnh ${i + 1} (phóng to)`
+        overlay.removeAttribute('hidden')
       },
 
       showProjects() {
@@ -2965,8 +3033,7 @@
           if (!p.full_urls?.length && !p.thumb_url) return
           const card = document.createElement('div')
           card.className = 'lb-proj-card' + (p.title === this._title ? ' active' : '')
-          card.innerHTML = `<img src="${p.thumb_url || p.full_urls[0]}" alt="${p.title}" loading="lazy">
-            <div class="lb-proj-card-name">${p.title}</div>`
+          card.innerHTML = `<img src="${p.thumb_url || p.full_urls[0]}" alt="${p.title}" loading="lazy"><div class="lb-proj-card-name">${p.title}</div>`
           card.addEventListener('click', () => {
             const urls = (p.full_urls && p.full_urls.length) ? p.full_urls : [p.thumb_url]
             this.open(urls, 0, p.title, p.category || '', p.video_id || '')
@@ -2978,10 +3045,14 @@
 
       close() {
         if (this._observer) { this._observer.disconnect(); this._observer = null }
-        document.getElementById('img-lightbox').setAttribute('hidden', '')
+        if (this._lazyObs) { this._lazyObs.disconnect(); this._lazyObs = null }
+        const lb_el = document.getElementById('img-lightbox')
+        lb_el.classList.remove('lb-open')
+        setTimeout(() => lb_el.setAttribute('hidden', ''), 220)
         document.body.style.overflow = ''
         document.getElementById('lb-scroll').innerHTML = ''
         document.getElementById('lb-projects').setAttribute('hidden', '')
+        document.getElementById('lb-zoom-overlay').setAttribute('hidden', '')
       }
     }
 
@@ -2992,9 +3063,23 @@
       if (panel.hasAttribute('hidden')) lb.showProjects()
       else panel.setAttribute('hidden', '')
     })
+    document.getElementById('lb-nav-prev').addEventListener('click', () => lb.scrollTo(lb._idx - 1))
+    document.getElementById('lb-nav-next').addEventListener('click', () => lb.scrollTo(lb._idx + 1))
+    document.getElementById('lb-zoom-overlay').addEventListener('click', () =>
+      document.getElementById('lb-zoom-overlay').setAttribute('hidden', ''))
+    document.getElementById('lb-zoom-close').addEventListener('click', e => {
+      e.stopPropagation()
+      document.getElementById('lb-zoom-overlay').setAttribute('hidden', '')
+    })
     document.addEventListener('keydown', e => {
-      if (!document.getElementById('img-lightbox').hasAttribute('hidden') && e.key === 'Escape')
-        lb.close()
+      if (document.getElementById('img-lightbox').hasAttribute('hidden')) return
+      if (e.key === 'Escape') {
+        if (!document.getElementById('lb-zoom-overlay').hasAttribute('hidden'))
+          document.getElementById('lb-zoom-overlay').setAttribute('hidden', '')
+        else lb.close()
+      }
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') lb.scrollTo(lb._idx + 1)
+      if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') lb.scrollTo(lb._idx - 1)
     })
 
     // ══════════════════════════════
