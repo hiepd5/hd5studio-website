@@ -55,7 +55,7 @@
 
 ---
 
-## Trạng thái hiện tại — 2026-05-04
+## Trạng thái hiện tại — 2026-05-04 (cập nhật session 7)
 
 ### ✅ Đã hoàn thành (session 1 — 2026-05-01)
 - `index.html` — landing page đầy đủ 11 sections
@@ -152,6 +152,12 @@
   - `_portfolioItems` lưu toàn cục khi `loadPortfolio()` chạy → lightbox có thể render switcher bất cứ lúc nào
   - Xóa sạch code cũ: `loadImage`, `slideTo`, `prev/next`, `zoom/pan`, drag/touch handlers, slide CSS classes (~290 dòng)
 
+### ✅ Đã hoàn thành (session 7 — 2026-05-04)
+- **YouTube showreel quality** — thêm `&vq=hd1080` vào embed URL cinema hero → YouTube ưu tiên stream 1080p
+- **Film strip thumbnail (thử nghiệm → đã xóa)** — thêm dải thumbnail ngang bên dưới header, thử tilt -5°, sau đó bỏ tilt, cuối cùng xóa hoàn toàn vì gây lag và không cải thiện UX
+- **Lightbox v3 — ảnh full tự nhiên** — bỏ `aspect-ratio: 16/9` + `object-fit: cover`, ảnh hiển thị `width: 100%; height: auto` — xem toàn bộ render không cần click zoom
+- **Fix ảnh chồng nhau desktop** — xóa `display: flex` + `object-fit: contain` xung đột nhau, đơn giản hóa CSS về `display: block; width: 100%; height: auto`
+
 ### 🔲 Việc cần làm tiếp
 
 **[UNBLOCK — bạn tự làm]**
@@ -167,7 +173,6 @@
 **[MEDIUM]**
 - [ ] Favicon 32×32 + 192×192 (ảnh hưởng SEO + professional look)
 - [ ] Cập nhật `/add-project` command thêm trường `urls_360` và câu hỏi về ảnh 360°
-- [ ] Lightbox: xem xét thêm thumbnail strip dưới cùng để nhảy nhanh đến ảnh bất kỳ (nếu dự án có nhiều ảnh ≥6)
 
 **[PHASE 2]**
 - [ ] Next.js 14 migration
@@ -198,3 +203,6 @@
 - **Counter IntersectionObserver `rootMargin: '-10% 0px -89% 0px'`** — pin vùng "đang xem" vào 1/10 đầu của scroll container; threshold=0.5 cũ không đáng tin với ảnh panorama rất dài/rộng
 - **Nút "← Dự án" và "Trở về" nhóm cùng bên trái header** — user cần nhận ra ngay 2 lối thoát: đổi dự án (không đóng lightbox) và về trang chính; đặt cùng nhóm trái giúp mắt tìm theo thói quen đọc trái-phải, không nhầm với counter/video bên phải
 - **`_portfolioItems` global array** — lưu kết quả fetch portfolio ở scope module thay vì chỉ dùng trong `renderPortfolio()`; cho phép lightbox project switcher render grid mà không cần fetch lại
+- **Film strip thumbnail không hiệu quả cho portfolio kiến trúc** — thử tilt -5° gây lag vì CSS transform trên nhiều phần tử cùng lúc; bỏ tilt rồi bỏ luôn strip vì không thêm giá trị khi ảnh đã cuộn dọc liên tục; quyết định: lightbox chỉ cần header + scroll đơn giản
+- **Lightbox ảnh full `height: auto` thay vì crop 16:9** — ảnh render kiến trúc có tỉ lệ đa dạng (panorama, portrait, standard); crop 16:9 cắt mất nội dung; user muốn xem toàn bộ ảnh không cần click; `display: block; width: 100%; height: auto` là CSS đơn giản nhất và đúng nhất
+- **Tránh kết hợp `display: flex` + `object-fit: contain` + `height: auto`** — ba thuộc tính này xung đột nhau: `object-fit` chỉ hoạt động khi cả width lẫn height được set cứng; khi dùng `height: auto` thì `object-fit` vô nghĩa; `flex` làm container không tính height đúng từ img; kết quả: ảnh chồng nhau trên desktop. Giải pháp: bỏ hết, dùng `display: block` thuần túy
