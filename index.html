@@ -512,7 +512,7 @@
 
     .cinema-content h1 {
       font-family: 'Be Vietnam Pro', sans-serif;
-      font-size: clamp(36px, 5vw, 72px);
+      font-size: clamp(42px, 5.5vw, 80px);
       font-weight: 800;
       color: var(--white);
       letter-spacing: -.04em;
@@ -1427,7 +1427,7 @@
 
     }
 
-    ═══
+    /* ═══════════════════════════════════════
      YOUTUBE MODAL
   ═══════════════════════════════════════ */
     #yt-modal {
@@ -3228,8 +3228,6 @@
       if (!document.getElementById('modal-360').hasAttribute('hidden') && e.key === 'Escape') pano360.close()
     })
 
-    audioMgr.init()
-
   </script>
 
   <!-- Audio tracks -->
@@ -3238,6 +3236,8 @@
 
   <!-- Floating mute button (hiện khi đang phát nhạc) -->
   <button id="audio-mute-btn" aria-label="Tắt nhạc" hidden>🔊</button>
+
+  <script>audioMgr.init()</script>
 </body>
 
 </html>
