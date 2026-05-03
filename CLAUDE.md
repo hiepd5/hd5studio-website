@@ -55,7 +55,7 @@
 
 ---
 
-## Trạng thái hiện tại — 2026-05-03
+## Trạng thái hiện tại — 2026-05-04
 
 ### ✅ Đã hoàn thành (session 1 — 2026-05-01)
 - `index.html` — landing page đầy đủ 11 sections
@@ -134,6 +134,24 @@
   - Xóa `hero-bg-glow`, `hero-line`, `hero-dots` — không cần khi có video background
 - **Supabase `site_config`** — cần 2 field: `showreel_video_id` (ID ngắn) + `showreel_poster_url` (URL ảnh thumbnail)
 
+### ✅ Đã hoàn thành (session 6 — 2026-05-04)
+- **Lightbox v2 — vertical scroll gallery** — thay UX "1 ảnh + prev/next" bằng cuộn dọc xem tất cả ảnh:
+  - Header bar: `[← Dự án] [Trở về]` nhóm trái | tên dự án giữa | counter gold + nút video phải
+  - Ảnh `100vw` full-bleed, `aspect-ratio: 16/9`, `object-fit: cover; object-position: center` — hiển thị phần giữa ảnh
+  - Shimmer loading animation `::after` trên mỗi item trước khi ảnh load xong
+  - Lazy load: chỉ ảnh đầu (`idx`) load ngay, còn lại dùng `data-src` + IntersectionObserver `rootMargin: 200px`
+  - Counter `1/7` dùng IntersectionObserver `rootMargin: '-10% 0px -89% 0px'` — chính xác với ảnh panorama
+  - Fade-in `opacity 0→1` khi mở, fade-out khi đóng (220ms)
+  - Focus trap: focus nhảy vào nút "Trở về" khi lightbox mở (`lb-close.focus()`)
+  - `role="dialog" aria-modal="true" aria-labelledby="lb-title"` — accessibility đầy đủ
+  - Floating arrows `‹ ›` hai bên desktop (ẩn mobile), click scroll mượt đến ảnh trước/sau
+  - Arrow keys ↑← = ảnh trước, ↓→ = ảnh sau; ESC đóng zoom trước rồi mới đóng lightbox
+  - Click ảnh → zoom overlay full `96vw×96vh` với nút đóng và click ngoài để thoát
+  - `safe-area-inset-top` trên nút đóng — không bị che bởi notch iPhone
+  - Project switcher panel: click "← Dự án" → grid thumbnail tất cả dự án, dự án đang xem highlight gold
+  - `_portfolioItems` lưu toàn cục khi `loadPortfolio()` chạy → lightbox có thể render switcher bất cứ lúc nào
+  - Xóa sạch code cũ: `loadImage`, `slideTo`, `prev/next`, `zoom/pan`, drag/touch handlers, slide CSS classes (~290 dòng)
+
 ### 🔲 Việc cần làm tiếp
 
 **[UNBLOCK — bạn tự làm]**
@@ -149,6 +167,7 @@
 **[MEDIUM]**
 - [ ] Favicon 32×32 + 192×192 (ảnh hưởng SEO + professional look)
 - [ ] Cập nhật `/add-project` command thêm trường `urls_360` và câu hỏi về ảnh 360°
+- [ ] Lightbox: xem xét thêm thumbnail strip dưới cùng để nhảy nhanh đến ảnh bất kỳ (nếu dự án có nhiều ảnh ≥6)
 
 **[PHASE 2]**
 - [ ] Next.js 14 migration
@@ -173,3 +192,9 @@
 - **WebP cho ảnh 360°** — dùng WebP (không phải JPG) vì Pannellum hỗ trợ tốt và tiết kiệm ~35% dung lượng; target ≤1.5MB/ảnh ở 8000×4000px
 - **Mobile 360° viewer** — side buttons ẩn hoàn toàn trên mobile (khó bấm khi đang xoay panorama), thay bằng bottom nav bar pill riêng dễ bấm hơn
 - **`aria-label` trên tất cả icon-only buttons** — screen reader đọc `✕` là "cross" không phải "đóng"; luôn thêm aria-label cho button chỉ có ký tự Unicode
+- **Lightbox scroll-dọc thay vì prev/next** — portfolio kiến trúc có ảnh panorama rộng, cuộn dọc tự nhiên hơn click next; user xem theo nhịp riêng, không bị gián đoạn giữa ảnh; phù hợp hành vi scroll mobile
+- **`object-fit: cover; object-position: center` cho ảnh lightbox** — ảnh render kiến trúc thường panorama 21:9+; nếu dùng `height: auto` thì ảnh hiện thành dải mỏng, mất tác động thị giác; crop về 16:9 center đảm bảo mỗi ảnh đều có "impact" ngay khi hiện
+- **Lazy load ảnh lightbox bằng `data-src` + IntersectionObserver riêng** — không dùng `loading="lazy"` trên img tạo bằng JS (thuộc tính này không hoạt động đáng tin cậy khi set sau khi append vào DOM); dùng observer với `rootMargin: 200px` để preload trước khi scroll đến
+- **Counter IntersectionObserver `rootMargin: '-10% 0px -89% 0px'`** — pin vùng "đang xem" vào 1/10 đầu của scroll container; threshold=0.5 cũ không đáng tin với ảnh panorama rất dài/rộng
+- **Nút "← Dự án" và "Trở về" nhóm cùng bên trái header** — user cần nhận ra ngay 2 lối thoát: đổi dự án (không đóng lightbox) và về trang chính; đặt cùng nhóm trái giúp mắt tìm theo thói quen đọc trái-phải, không nhầm với counter/video bên phải
+- **`_portfolioItems` global array** — lưu kết quả fetch portfolio ở scope module thay vì chỉ dùng trong `renderPortfolio()`; cho phép lightbox project switcher render grid mà không cần fetch lại
