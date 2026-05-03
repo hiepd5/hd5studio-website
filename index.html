@@ -2874,8 +2874,9 @@
       }
       const ytId = cfg.showreel_video_id
       if (!ytId) return
+      const isMobile = window.innerWidth <= 768
       screen.innerHTML = `<iframe
-        src="https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&loop=1&playlist=${ytId}&controls=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&start=1&vq=hd1080"
+        src="https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&loop=1&playlist=${ytId}&controls=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&start=1&vq=${isMobile ? 'hd1080' : 'hd1440'}"
         allow="autoplay; encrypted-media"
         allowfullscreen
         title="HD5 Studio Showreel"
