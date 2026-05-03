@@ -440,6 +440,23 @@
       pointer-events: none;
     }
 
+    #audio-mute-btn {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      z-index: 9000;
+      background: rgba(15,15,15,.88);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 50%;
+      width: 46px; height: 46px;
+      font-size: 20px;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: transform .2s, border-color .2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #audio-mute-btn:hover { transform: scale(1.12); border-color: var(--gold-bd); }
+    #audio-mute-btn[hidden] { display: none; }
+
     #cinema-unmute {
       position: absolute;
       bottom: 20px; right: 20px;
@@ -2849,6 +2866,56 @@
     }
     loadTour360()
 
+    // ── Audio Manager ──────────────────────────────
+    const audioMgr = {
+      _current: null, _muted: false, _btn: null,
+      init() {
+        this._btn = document.getElementById('audio-mute-btn')
+        this._btn.addEventListener('click', () => this.toggleMute())
+      },
+      play(id) {
+        const next = document.getElementById(id)
+        if (this._current === next) return
+        this._fadeOut(this._current, () => {
+          this._current = next
+          if (!this._muted) this._fadeIn(next)
+          this._btn.removeAttribute('hidden')
+          this._btn.textContent = this._muted ? '🔇' : '🔊'
+        })
+      },
+      stop() {
+        this._fadeOut(this._current, () => { this._current = null })
+        this._btn.setAttribute('hidden', '')
+      },
+      toggleMute() {
+        this._muted = !this._muted
+        this._btn.textContent = this._muted ? '🔇' : '🔊'
+        this._btn.setAttribute('aria-label', this._muted ? 'Bật nhạc' : 'Tắt nhạc')
+        if (this._current) {
+          if (this._muted) this._fadeOut(this._current)
+          else this._fadeIn(this._current)
+        }
+      },
+      _fadeIn(el) {
+        if (!el) return
+        el.volume = 0
+        el.play().catch(() => {})
+        const step = 0.35 / 16
+        const t = setInterval(() => {
+          el.volume = Math.min(el.volume + step, 0.35)
+          if (el.volume >= 0.35) clearInterval(t)
+        }, 50)
+      },
+      _fadeOut(el, cb) {
+        if (!el) { cb?.(); return }
+        const step = Math.max(el.volume / 16, 0.01)
+        const t = setInterval(() => {
+          el.volume = Math.max(el.volume - step, 0)
+          if (el.volume <= 0) { clearInterval(t); el.pause(); el.currentTime = 0; cb?.() }
+        }, 50)
+      }
+    }
+
     // pano360 — Pannellum 360° viewer
     const pano360 = {
       urls: [], index: 0, viewer: null,
@@ -2862,6 +2929,7 @@
         document.getElementById('m360-bottom-nav').style.display = multiImg ? 'block' : 'none'
         await this.loadLib()
         this.loadScene(0)
+        audioMgr.play('audio-360')
       },
       loadScene(idx) {
         this.index = idx
@@ -2879,6 +2947,7 @@
       close() {
         if (this.viewer) { this.viewer.destroy(); this.viewer = null }
         document.getElementById('modal-360').setAttribute('hidden', '')
+        audioMgr.stop()
       },
       loadLib() {
         if (window.pannellum) return Promise.resolve()
@@ -3028,6 +3097,7 @@
         requestAnimationFrame(() => lb_el.classList.add('lb-open'))
         document.body.style.overflow = 'hidden'
         document.getElementById('lb-close').focus()
+        audioMgr.play('audio-lb')
 
         this._setupCounter(scroll, urls.length)
         this._updateArrows()
@@ -3104,6 +3174,7 @@
         document.getElementById('lb-scroll').innerHTML = ''
         document.getElementById('lb-projects').setAttribute('hidden', '')
         document.getElementById('lb-zoom-overlay').setAttribute('hidden', '')
+        audioMgr.stop()
       }
     }
 
@@ -3157,7 +3228,16 @@
       if (!document.getElementById('modal-360').hasAttribute('hidden') && e.key === 'Escape') pano360.close()
     })
 
+    audioMgr.init()
+
   </script>
+
+  <!-- Audio tracks -->
+  <audio id="audio-lb" src="https://pub-51ede49b8dd446e48127b94ee7d22d71.r2.dev/audio/lightbox-ambient.mp3" loop preload="none"></audio>
+  <audio id="audio-360" src="https://pub-51ede49b8dd446e48127b94ee7d22d71.r2.dev/audio/tour360-ambient.mp3" loop preload="none"></audio>
+
+  <!-- Floating mute button (hiện khi đang phát nhạc) -->
+  <button id="audio-mute-btn" aria-label="Tắt nhạc" hidden>🔊</button>
 </body>
 
 </html>
