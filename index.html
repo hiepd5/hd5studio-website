@@ -1284,29 +1284,34 @@
 
     .lb-scroll {
       flex: 1; overflow-y: auto;
-      padding: 4px 0 80px;
+      padding: 0 0 80px;
       display: flex; flex-direction: column;
-      align-items: center; gap: 4px;
+      align-items: center; gap: 0;
     }
     .lb-scroll::-webkit-scrollbar { width: 4px; }
     .lb-scroll::-webkit-scrollbar-track { background: transparent; }
     .lb-scroll::-webkit-scrollbar-thumb { background: rgba(200,169,110,.3); border-radius: 4px; }
 
     .lb-scroll-item {
-      width: 100vw; position: relative;
-      background: #111; overflow: hidden;
+      width: 100%; position: relative;
+      background: #0d0d0d;
+      min-height: 40vh;
+      display: flex; align-items: center; justify-content: center;
+      border-bottom: 1px solid #1a1a1a;
     }
     .lb-scroll-item::after {
       content: ""; position: absolute; inset: 0;
       background: linear-gradient(90deg,transparent 25%,rgba(255,255,255,.04) 50%,transparent 75%);
       background-size: 200% 100%;
       animation: lb-shimmer 1.4s infinite;
+      pointer-events: none;
     }
     .lb-scroll-item.lb-item-loaded::after { display: none; }
     @keyframes lb-shimmer { to { background-position: -200% 0; } }
 
     .lb-scroll-item img {
       display: block; width: 100%; height: auto;
+      max-height: 90vh; object-fit: contain;
       opacity: 0; transition: opacity .4s ease;
     }
     .lb-scroll-item img.lb-loaded { opacity: 1; }
