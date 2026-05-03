@@ -1330,37 +1330,6 @@
     .lb-nav-prev { left: 8px; }
     .lb-nav-next { right: 8px; }
 
-    .lb-film-strip {
-      flex-shrink: 0;
-      display: flex; align-items: flex-end; gap: 8px;
-      padding: 14px 20px 18px;
-      overflow-x: auto; overflow-y: visible;
-      background: rgba(4,4,4,.95);
-      border-bottom: 1px solid rgba(255,255,255,.06);
-      scrollbar-width: none;
-    }
-    .lb-film-strip::-webkit-scrollbar { display: none; }
-    .lb-thumb {
-      flex-shrink: 0;
-      width: 100px; height: 64px;
-      border-radius: 5px; overflow: hidden;
-      cursor: pointer;
-      transition: border-color .2s, opacity .2s;
-      border: 2px solid rgba(255,255,255,.12);
-      position: relative; z-index: 1;
-      opacity: .7;
-    }
-    .lb-thumb img {
-      display: block; width: 100%; height: 100%;
-      object-fit: cover; object-position: center;
-      pointer-events: none;
-    }
-    .lb-thumb:hover { border-color: rgba(255,255,255,.4); opacity: 1; }
-    .lb-thumb.lb-thumb-active {
-      border-color: var(--gold);
-      box-shadow: 0 0 10px rgba(200,169,110,.3);
-      opacity: 1;
-    }
 
     .lb-zoom-overlay {
       position: fixed; inset: 0; z-index: 30;
@@ -1424,8 +1393,7 @@
       .lb-nav-arrow { display: none; }
       .lb-proj-grid { grid-template-columns: repeat(2,1fr); }
       .lb-header { padding: 12px 60px 12px 16px; }
-      .lb-thumb { width: 80px; height: 52px; }
-      .lb-film-strip { padding: 10px 12px 14px; gap: 6px; }
+
     }
 
     ═══
@@ -2507,7 +2475,6 @@
           <button class="lb-play-yt" id="lb-play-yt" hidden>▶ Xem video</button>
         </div>
       </div>
-      <div class="lb-film-strip" id="lb-film-strip"></div>
       <div class="lb-scroll" id="lb-scroll"></div>
       <div class="lb-projects" id="lb-projects" hidden>
         <p class="lb-projects-title">Chọn dự án</p>
@@ -3013,8 +2980,6 @@
           if (i !== idx) this._lazyObs.observe(item)
         })
 
-        this._renderFilmStrip(urls, idx, title)
-
         // Show lightbox with fade-in
         const lb_el = document.getElementById('img-lightbox')
         lb_el.removeAttribute('hidden')
@@ -3042,42 +3007,10 @@
               this._idx = +e.target.dataset.index
               document.getElementById('lb-counter').textContent = `${this._idx + 1} / ${total}`
               this._updateArrows()
-              this._syncThumb(this._idx)
             }
           })
         }, { root: scroll, rootMargin: '-10% 0px -89% 0px', threshold: 0 })
         scroll.querySelectorAll('.lb-scroll-item').forEach(el => this._observer.observe(el))
-      },
-
-      _renderFilmStrip(urls, activeIdx, title) {
-        const strip = document.getElementById('lb-film-strip')
-        strip.innerHTML = ''
-        urls.forEach((url, i) => {
-          const thumb = document.createElement('div')
-          thumb.className = 'lb-thumb' + (i === activeIdx ? ' lb-thumb-active' : '')
-          thumb.dataset.index = i
-          thumb.setAttribute('role', 'button')
-          thumb.setAttribute('aria-label', `Ảnh ${i + 1}`)
-          thumb.setAttribute('tabindex', '0')
-          const img = document.createElement('img')
-          img.src = url
-          img.alt = `${title} — ảnh ${i + 1}`
-          img.loading = 'lazy'
-          thumb.appendChild(img)
-          thumb.addEventListener('click', () => this.scrollTo(i))
-          strip.appendChild(thumb)
-        })
-        requestAnimationFrame(() => {
-          strip.querySelectorAll('.lb-thumb')[activeIdx]?.scrollIntoView({ inline: 'center', block: 'nearest' })
-        })
-      },
-
-      _syncThumb(idx) {
-        const strip = document.getElementById('lb-film-strip')
-        strip.querySelectorAll('.lb-thumb').forEach((t, i) => {
-          t.classList.toggle('lb-thumb-active', i === idx)
-        })
-        strip.querySelectorAll('.lb-thumb')[idx]?.scrollIntoView({ inline: 'nearest', block: 'nearest', behavior: 'smooth' })
       },
 
       _updateArrows() {
@@ -3127,7 +3060,6 @@
         setTimeout(() => lb_el.setAttribute('hidden', ''), 220)
         document.body.style.overflow = ''
         document.getElementById('lb-scroll').innerHTML = ''
-        document.getElementById('lb-film-strip').innerHTML = ''
         document.getElementById('lb-projects').setAttribute('hidden', '')
         document.getElementById('lb-zoom-overlay').setAttribute('hidden', '')
       }
