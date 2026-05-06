@@ -41,6 +41,13 @@
 - **`var(--dim)=#444` không dùng cho text** — tương phản ~2.7:1; chỉ dùng `var(--muted)=#888` trở lên
 - **`aria-label` trên tất cả icon-only buttons** — screen reader đọc `✕` là "cross" không phải "đóng"
 
+## Portfolio Category Sections
+- **3 sections luôn hiển thị thay vì tab filter** — user thấy ngay 3 loại sản phẩm khi scroll, không cần click tab; phù hợp với mục tiêu showcase
+- **Max 6 dự án mỗi section + nút "Xem thêm"** — tránh trang quá dài, dự án quan trọng nhất (sort_order thấp) luôn hiện đầu
+- **`buildCard(p, hidden)` + `registerCardEvents(grid)` tách riêng** — renderCategoryGrid gọi lại 3 lần, cần hàm reusable tránh duplicate code
+- **Services link dùng native anchor `#cat-kientru`** — không cần JS handler; tránh xung đột với global smooth scroll `a[href^="#"]`
+- **R2 upload ảnh `.jpg` không phải `.webp`** — Supabase SQL phải dùng đúng extension file đã upload; lỗi phổ biến khi copy template SQL cũ dùng `.webp`
+
 ## Agents
 - **3 sub-agents tách biệt** — reviewer / researcher / guide chạy độc lập, không làm nặng context chính
 - **guide agent có context HD5 nhúng sẵn** — không cần giải thích lại bối cảnh mỗi lần hỏi

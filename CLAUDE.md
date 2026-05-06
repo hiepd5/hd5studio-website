@@ -51,7 +51,7 @@
 
 ---
 
-## Trạng thái hiện tại — session 8 (2026-05-04)
+## Trạng thái hiện tại — session 9 (2026-05-07)
 
 ### Đã hoàn thành
 - Landing page đầy đủ, live `hd5studio.com`
@@ -63,13 +63,17 @@
 - Trust bar 8 khách hàng thật (Fly Media, Danko Group, MIK Group...)
 - Testimonials 3 khách hàng thật (Fly Media, Archivina JSC, VNC Ocean Park)
 - Section Feature 2 (Tốc độ/Dashboard) đã xóa
+- **Portfolio redesign: 3 sections category luôn hiển thị** — Kiến trúc / Quy hoạch / TVC, max 6 dự án mỗi section, nút "Xem thêm" nếu >6
+- **Services deep-link**: "Tìm hiểu thêm" scroll thẳng đến đúng category section (`#cat-kientru`, `#cat-quyhoach`, `#cat-tvc`)
+- **Bug fix `_fadeOut`**: edge case volume=0 gây infinite loop → thêm guard early return
+- Dự án `qh-6000ha` đã INSERT vào Supabase portfolio (`.jpg` không phải `.webp`)
 
 ### Việc cần làm tiếp
 
 **[UNBLOCK — bạn tự làm trong Supabase/R2]**
 - [ ] `site_config.showreel_video_id` = ID ngắn 11 ký tự (bỏ `&list=...`)
 - [ ] `site_config.showreel_poster_url` = URL thumbnail YouTube
-- [ ] Upload ảnh `cong-vien-1` lên R2 → bật `active=true`
+- [ ] Đảm bảo `category` các dự án Supabase dùng đúng tên: `Diễn họa Kiến trúc` / `Diễn họa Quy hoạch` / `TVC Bất động sản`
 
 **[HIGH]**
 - [ ] Footer — thêm email liên hệ, địa chỉ studio
