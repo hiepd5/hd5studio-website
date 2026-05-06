@@ -1421,6 +1421,12 @@
       text-transform: uppercase; color: var(--gold); margin-bottom: 20px;
     }
     .lb-proj-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(180px,1fr)); gap: 12px; }
+    .lb-proj-cat-label {
+      grid-column: 1/-1; font-size: 11px; font-weight: 600; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--gold);
+      margin: 16px 0 4px; padding-top: 12px; border-top: 1px solid var(--border);
+    }
+    .lb-proj-cat-label:first-child { margin-top: 0; border-top: none; }
     .lb-proj-card {
       cursor: pointer; border-radius: 8px; overflow: hidden;
       border: 2px solid transparent; transition: border-color .2s, transform .2s;
@@ -2788,7 +2794,7 @@
         if (!res.ok) throw new Error('API error')
         _portfolioItems = await res.json()
         CATS.forEach(cat => {
-          const items = _portfolioItems.filter(p => p.category === cat.key)
+          const items = _portfolioItems.filter(p => (p.category || '').trim() === cat.key)
           renderCategoryGrid(items, cat.gridId, cat.moreId)
         })
       } catch (e) {
@@ -3127,16 +3133,25 @@
         const panel = document.getElementById('lb-projects')
         const grid = document.getElementById('lb-proj-grid')
         grid.innerHTML = ''
-        _portfolioItems.forEach(p => {
-          if (!p.full_urls?.length && !p.thumb_url) return
-          const card = document.createElement('div')
-          card.className = 'lb-proj-card' + (p.title === this._title ? ' active' : '')
-          card.innerHTML = `<img src="${p.thumb_url || p.full_urls[0]}" alt="${p.title}" loading="lazy"><div class="lb-proj-card-name">${p.title}</div>`
-          card.addEventListener('click', () => {
-            const urls = (p.full_urls && p.full_urls.length) ? p.full_urls : [p.thumb_url]
-            this.open(urls, 0, p.title, p.category || '', p.video_id || '')
+        CATS.forEach(cat => {
+          const catItems = _portfolioItems.filter(p =>
+            (p.full_urls?.length || p.thumb_url) && (p.category || '').trim() === cat.key
+          )
+          if (!catItems.length) return
+          const label = document.createElement('p')
+          label.className = 'lb-proj-cat-label'
+          label.textContent = cat.key
+          grid.appendChild(label)
+          catItems.forEach(p => {
+            const card = document.createElement('div')
+            card.className = 'lb-proj-card' + (p.title === this._title ? ' active' : '')
+            card.innerHTML = `<img src="${p.thumb_url || p.full_urls[0]}" alt="${p.title}" loading="lazy"><div class="lb-proj-card-name">${p.title}</div>`
+            card.addEventListener('click', () => {
+              const urls = (p.full_urls && p.full_urls.length) ? p.full_urls : [p.thumb_url]
+              this.open(urls, 0, p.title, p.category || '', p.video_id || '')
+            })
+            grid.appendChild(card)
           })
-          grid.appendChild(card)
         })
         panel.removeAttribute('hidden')
       },
