@@ -1327,6 +1327,22 @@
       align-items: stretch; justify-content: flex-start;
     }
 
+    .lb-related {
+      flex-shrink: 0; display: flex; gap: 8px; align-items: center;
+      padding: 10px 16px; overflow-x: auto; scrollbar-width: none;
+      background: rgba(8,8,8,.95); border-top: 1px solid rgba(255,255,255,.06);
+    }
+    .lb-related:empty { display: none; }
+    .lb-related::-webkit-scrollbar { display: none; }
+    .lb-related-item {
+      flex-shrink: 0; width: 80px; height: 56px; border-radius: 6px; overflow: hidden;
+      cursor: pointer; border: 2px solid transparent; transition: border-color .2s, opacity .2s;
+      opacity: .6;
+    }
+    .lb-related-item:hover { opacity: 1; border-color: rgba(200,169,110,.5); }
+    .lb-related-item.active { opacity: 1; border-color: var(--gold); }
+    .lb-related-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
     .lb-header {
       flex-shrink: 0;
       display: flex; align-items: center;
@@ -2488,6 +2504,7 @@
         </div>
       </div>
       <div class="lb-scroll" id="lb-scroll"></div>
+      <div class="lb-related" id="lb-related"></div>
       <div class="lb-projects" id="lb-projects" hidden>
         <p class="lb-projects-title">Chọn dự án</p>
         <div class="lb-proj-grid" id="lb-proj-grid"></div>
@@ -3045,6 +3062,22 @@
         if (videoId) ytBtn.onclick = () => { this.close(); openYtModal(videoId) }
         document.getElementById('lb-projects').setAttribute('hidden', '')
         document.getElementById('lb-zoom-overlay').setAttribute('hidden', '')
+
+        // Related projects strip — same category
+        const related = document.getElementById('lb-related')
+        related.innerHTML = ''
+        const samecat = _portfolioItems.filter(p => (p.category || '') === (category || '') && (p.full_urls?.length || p.thumb_url))
+        samecat.forEach(p => {
+          const item = document.createElement('div')
+          item.className = 'lb-related-item' + (p.title === title ? ' active' : '')
+          item.innerHTML = `<img src="${p.thumb_url || p.full_urls[0]}" alt="${p.title}" loading="lazy">`
+          item.title = p.title
+          item.addEventListener('click', () => {
+            const urls = (p.full_urls?.length) ? p.full_urls : [p.thumb_url]
+            this.open(urls, 0, p.title, p.category || '', p.video_id || '')
+          })
+          related.appendChild(item)
+        })
 
         // Build items with lazy load
         const scroll = document.getElementById('lb-scroll')
