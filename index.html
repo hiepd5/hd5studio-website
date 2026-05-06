@@ -1070,6 +1070,28 @@
     /* ═══════════════════════════════════════
      PORTFOLIO
   ═══════════════════════════════════════ */
+    .port-cat-section { margin-bottom: 56px; }
+    .port-cat-section:last-child { margin-bottom: 0; }
+    .port-cat-title {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      font-size: clamp(18px, 2vw, 24px);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .port-more-wrap { text-align: center; margin-top: 24px; }
+    .port-more-btn {
+      padding: 10px 28px; border-radius: 100px;
+      border: 1px solid var(--gold-bd); background: var(--gold-bg);
+      color: var(--gold); font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all .25s;
+      font-family: 'Be Vietnam Pro', sans-serif;
+    }
+    .port-more-btn:hover { background: var(--gold); color: #000; }
+    .port-item.port-hidden { display: none; }
+
     .port-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -2255,21 +2277,21 @@
           <h3>Diễn họa Kiến trúc</h3>
           <p>Render nội - ngoại thất photorealistic 4K. Ánh sáng GI thực tế, vật liệu PBR, góc nhìn ấn tượng tối đa giá
             trị thẩm mỹ.</p>
-          <a href="#cta" class="svc-link">Tìm hiểu thêm →</a>
+          <a href="#cat-kientru" class="svc-link">Tìm hiểu thêm →</a>
         </div>
         <div class="svc">
           <div class="svc-ico">🌆</div>
           <h3>Diễn họa Quy hoạch</h3>
           <p>Masterplan, quy hoạch đô thị, bird-eye view toàn cảnh. Thể hiện tầm nhìn tổng thể dự án chuyên nghiệp nhất.
           </p>
-          <a href="#cta" class="svc-link">Tìm hiểu thêm →</a>
+          <a href="#cat-quyhoach" class="svc-link">Tìm hiểu thêm →</a>
         </div>
         <div class="svc">
           <div class="svc-ico">🎬</div>
           <h3>TVC Bất động sản</h3>
           <p>Video walkthrough cinematic, fly-through animation 4K/60fps. Tạo cảm xúc mạnh mẽ, tăng chuyển đổi khách
             hàng tiềm năng.</p>
-          <a href="#cta" class="svc-link">Tìm hiểu thêm →</a>
+          <a href="#cat-tvc" class="svc-link">Tìm hiểu thêm →</a>
         </div>
         <div class="svc">
           <div class="svc-ico">🔮</div>
@@ -2361,12 +2383,43 @@
         <h2 class="rx d1">Dự án tiêu biểu</h2>
         <p class="rx d2">Một phần trong hành trình kiến tạo hình ảnh của HD5 Studio.</p>
       </div>
-      <div class="port-grid" id="port-grid">
-        <!-- Skeleton loading -->
-        <div class="port-skeleton-item"><div class="port-skeleton-thumb"></div><div class="port-skeleton-info"><div class="port-skeleton-line" style="width:70%"></div><div class="port-skeleton-line" style="width:45%"></div></div></div>
-        <div class="port-skeleton-item"><div class="port-skeleton-thumb"></div><div class="port-skeleton-info"><div class="port-skeleton-line" style="width:60%"></div><div class="port-skeleton-line" style="width:40%"></div></div></div>
-        <div class="port-skeleton-item"><div class="port-skeleton-thumb"></div><div class="port-skeleton-info"><div class="port-skeleton-line" style="width:65%"></div><div class="port-skeleton-line" style="width:50%"></div></div></div>
+
+      <div class="port-cat-section" id="cat-kientru">
+        <h3 class="port-cat-title rx">Diễn họa Kiến trúc</h3>
+        <div class="port-grid" id="grid-kientru">
+          <div class="port-skeleton-item"><div class="port-skeleton-thumb"></div><div class="port-skeleton-info"><div class="port-skeleton-line" style="width:70%"></div><div class="port-skeleton-line" style="width:45%"></div></div></div>
+          <div class="port-skeleton-item"><div class="port-skeleton-thumb"></div><div class="port-skeleton-info"><div class="port-skeleton-line" style="width:60%"></div><div class="port-skeleton-line" style="width:40%"></div></div></div>
+          <div class="port-skeleton-item"><div class="port-skeleton-thumb"></div><div class="port-skeleton-info"><div class="port-skeleton-line" style="width:65%"></div><div class="port-skeleton-line" style="width:50%"></div></div></div>
+        </div>
+        <div class="port-more-wrap" id="more-kientru" hidden>
+          <button class="port-more-btn" data-grid="grid-kientru" data-more="more-kientru">Xem thêm dự án →</button>
+        </div>
       </div>
+
+      <div class="port-cat-section" id="cat-quyhoach">
+        <h3 class="port-cat-title rx">Diễn họa Quy hoạch</h3>
+        <div class="port-grid" id="grid-quyhoach">
+          <div class="port-skeleton-item"><div class="port-skeleton-thumb"></div><div class="port-skeleton-info"><div class="port-skeleton-line" style="width:70%"></div><div class="port-skeleton-line" style="width:45%"></div></div></div>
+          <div class="port-skeleton-item"><div class="port-skeleton-thumb"></div><div class="port-skeleton-info"><div class="port-skeleton-line" style="width:60%"></div><div class="port-skeleton-line" style="width:40%"></div></div></div>
+          <div class="port-skeleton-item"><div class="port-skeleton-thumb"></div><div class="port-skeleton-info"><div class="port-skeleton-line" style="width:65%"></div><div class="port-skeleton-line" style="width:50%"></div></div></div>
+        </div>
+        <div class="port-more-wrap" id="more-quyhoach" hidden>
+          <button class="port-more-btn" data-grid="grid-quyhoach" data-more="more-quyhoach">Xem thêm dự án →</button>
+        </div>
+      </div>
+
+      <div class="port-cat-section" id="cat-tvc">
+        <h3 class="port-cat-title rx">TVC Bất động sản</h3>
+        <div class="port-grid" id="grid-tvc">
+          <div class="port-skeleton-item"><div class="port-skeleton-thumb"></div><div class="port-skeleton-info"><div class="port-skeleton-line" style="width:70%"></div><div class="port-skeleton-line" style="width:45%"></div></div></div>
+          <div class="port-skeleton-item"><div class="port-skeleton-thumb"></div><div class="port-skeleton-info"><div class="port-skeleton-line" style="width:60%"></div><div class="port-skeleton-line" style="width:40%"></div></div></div>
+          <div class="port-skeleton-item"><div class="port-skeleton-thumb"></div><div class="port-skeleton-info"><div class="port-skeleton-line" style="width:65%"></div><div class="port-skeleton-line" style="width:50%"></div></div></div>
+        </div>
+        <div class="port-more-wrap" id="more-tvc" hidden>
+          <button class="port-more-btn" data-grid="grid-tvc" data-more="more-tvc">Xem thêm dự án →</button>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -2658,64 +2711,46 @@
     // ══════════════════════════════
     let _portfolioItems = []
 
-    async function loadPortfolio() {
-      try {
-        const res = await fetch('/api/portfolio')
-        if (!res.ok) throw new Error('API error')
-        const items = await res.json()
-        _portfolioItems = items
-        renderPortfolio(items)
-      } catch (e) {
-        document.getElementById('port-grid').innerHTML =
-          '<p style="color:var(--muted);font-size:13px;grid-column:1/-1;text-align:center;padding:40px 0">Đang tải danh sách dự án...</p>'
-      }
-    }
+    const CATS = [
+      { key: 'Diễn họa Kiến trúc', gridId: 'grid-kientru', moreId: 'more-kientru' },
+      { key: 'Diễn họa Quy hoạch', gridId: 'grid-quyhoach', moreId: 'more-quyhoach' },
+      { key: 'TVC Bất động sản', gridId: 'grid-tvc', moreId: 'more-tvc' },
+    ]
+    const MAX_VISIBLE = 6
 
-    function renderPortfolio(items) {
-      const grid = document.getElementById('port-grid')
-      if (!items.length) {
-        grid.innerHTML = '<p style="color:var(--muted);font-size:13px;grid-column:1/-1;text-align:center;padding:40px 0">Chưa có dự án nào.</p>'
-        return
-      }
-      grid.innerHTML = items.map((p, i) => {
-        const delay = ['', 'd1', 'd2', 'd3', 'd4', 'd5'][Math.min(i, 5)]
-        const fullUrls = (p.full_urls && p.full_urls.length) ? p.full_urls : (p.thumb_url ? [p.thumb_url] : [])
-        const fullUrlsJson = JSON.stringify(fullUrls).replace(/"/g, '&quot;')
-        const tags = (p.tags || []).map(t => `<span>${t}</span>`).join('')
-        const videoBtn = p.video_id
-          ? `<button class="port-btn-play" data-video="${p.video_id}">▶ Video</button>`
-          : ''
-        const thumbImg = p.thumb_url
-          ? `<img src="${p.thumb_url}" alt="${p.title}" width="800" height="600" loading="lazy">`
-          : `<div class="port-thumb-placeholder"></div>`
-        return `
-          <div class="port-item ${p.featured ? 'span2' : ''} rx ${delay}"
-               data-full-urls="${fullUrlsJson}"
-               data-title="${p.title}"
-               data-category="${p.category || ''}"
-               data-video="${p.video_id || ''}">
-            <div class="port-thumb">
-              ${thumbImg}
-              <div class="port-overlay">
-                <div class="port-overlay-tags">${tags}</div>
-                <div class="port-overlay-actions">
-                  <button class="port-btn-view" data-action="lightbox">🔍 Xem ảnh</button>
-                  ${videoBtn}
-                </div>
+    function buildCard(p, hidden) {
+      const delay = ['', 'd1', 'd2', 'd3', 'd4', 'd5'][Math.min(_portfolioItems.indexOf(p), 5)]
+      const fullUrls = (p.full_urls && p.full_urls.length) ? p.full_urls : (p.thumb_url ? [p.thumb_url] : [])
+      const fullUrlsJson = JSON.stringify(fullUrls).replace(/"/g, '&quot;')
+      const tags = (p.tags || []).map(t => `<span>${t}</span>`).join('')
+      const videoBtn = p.video_id ? `<button class="port-btn-play" data-video="${p.video_id}">▶ Video</button>` : ''
+      const thumbImg = p.thumb_url
+        ? `<img src="${p.thumb_url}" alt="${p.title}" width="800" height="600" loading="lazy">`
+        : `<div class="port-thumb-placeholder"></div>`
+      return `
+        <div class="port-item ${p.featured ? 'span2' : ''} ${hidden ? 'port-hidden' : ''} rx ${delay}"
+             data-full-urls="${fullUrlsJson}"
+             data-title="${p.title}"
+             data-category="${p.category || ''}"
+             data-video="${p.video_id || ''}">
+          <div class="port-thumb">
+            ${thumbImg}
+            <div class="port-overlay">
+              <div class="port-overlay-tags">${tags}</div>
+              <div class="port-overlay-actions">
+                <button class="port-btn-view" data-action="lightbox">🔍 Xem ảnh</button>
+                ${videoBtn}
               </div>
             </div>
-            <div class="port-info">
-              <h4>${p.title}</h4>
-              <p>${p.category || ''}${p.year ? ' · ' + p.year : ''}</p>
-            </div>
-          </div>`
-      }).join('')
+          </div>
+          <div class="port-info">
+            <h4>${p.title}</h4>
+            <p>${p.category || ''}${p.year ? ' · ' + p.year : ''}</p>
+          </div>
+        </div>`
+    }
 
-      // Re-register scroll reveal cho cards mới
-      grid.querySelectorAll('.rx').forEach(el => obs.observe(el))
-      initTilt()
-
-      // Click ảnh → lightbox, click video → YouTube modal
+    function registerCardEvents(grid) {
       grid.querySelectorAll('.port-item').forEach(card => {
         card.querySelector('[data-action="lightbox"]')?.addEventListener('click', e => {
           e.stopPropagation()
@@ -2726,12 +2761,42 @@
           e.stopPropagation()
           openYtModal(e.currentTarget.dataset.video)
         })
-        // Click vào thumb cũng mở lightbox
         card.querySelector('.port-thumb')?.addEventListener('click', () => {
           const urls = JSON.parse(card.dataset.fullUrls || '[]')
           if (urls.length) lb.open(urls, 0, card.dataset.title, card.dataset.category, card.dataset.video)
         })
       })
+    }
+
+    function renderCategoryGrid(items, gridId, moreId) {
+      const grid = document.getElementById(gridId)
+      const moreWrap = document.getElementById(moreId)
+      if (!items.length) {
+        grid.innerHTML = '<p style="color:var(--muted);font-size:13px;grid-column:1/-1;text-align:center;padding:20px 0">Chưa có dự án.</p>'
+        return
+      }
+      grid.innerHTML = items.map((p, i) => buildCard(p, i >= MAX_VISIBLE)).join('')
+      if (items.length > MAX_VISIBLE) moreWrap.removeAttribute('hidden')
+      grid.querySelectorAll('.rx, .rs').forEach(el => obs.observe(el))
+      initTilt()
+      registerCardEvents(grid)
+    }
+
+    async function loadPortfolio() {
+      try {
+        const res = await fetch('/api/portfolio')
+        if (!res.ok) throw new Error('API error')
+        _portfolioItems = await res.json()
+        CATS.forEach(cat => {
+          const items = _portfolioItems.filter(p => p.category === cat.key)
+          renderCategoryGrid(items, cat.gridId, cat.moreId)
+        })
+      } catch (e) {
+        CATS.forEach(cat => {
+          document.getElementById(cat.gridId).innerHTML =
+            '<p style="color:var(--muted);font-size:13px;grid-column:1/-1;text-align:center;padding:40px 0">Đang tải danh sách dự án...</p>'
+        })
+      }
     }
 
     loadPortfolio()
@@ -2819,7 +2884,7 @@
         }, 50)
       },
       _fadeOut(el, cb) {
-        if (!el) { cb?.(); return }
+        if (!el || el.volume === 0) { el?.pause(); el && (el.currentTime = 0); cb?.(); return }
         const step = Math.max(el.volume / 16, 0.01)
         const t = setInterval(() => {
           el.volume = Math.max(el.volume - step, 0)
@@ -3138,6 +3203,14 @@
     document.addEventListener('keydown', e => {
       if (!document.getElementById('yt-modal').hasAttribute('hidden') && e.key === 'Escape') closeYtModal()
       if (!document.getElementById('modal-360').hasAttribute('hidden') && e.key === 'Escape') pano360.close()
+    })
+
+    document.querySelectorAll('.port-more-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const grid = document.getElementById(btn.dataset.grid)
+        grid.querySelectorAll('.port-item.port-hidden').forEach(el => el.classList.remove('port-hidden'))
+        btn.closest('.port-more-wrap').setAttribute('hidden', '')
+      })
     })
 
   </script>
