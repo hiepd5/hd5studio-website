@@ -1379,6 +1379,9 @@
       background: #0d0d0d;
       border-bottom: 1px solid #1a1a1a;
     }
+    .lb-scroll-video { aspect-ratio: 16/9; background: #000; }
+    .lb-yt-wrap { position: absolute; inset: 0; }
+    .lb-yt-wrap iframe { width: 100%; height: 100%; border: none; }
     .lb-scroll-item img {
       display: block; width: 100%; height: auto;
       opacity: 0; transition: opacity .4s ease;
@@ -3092,19 +3095,29 @@
           })
         }, { root: scroll, rootMargin: '200px' })
 
+        // YouTube video as first item if project has video_id
+        let itemOffset = 0
+        if (videoId) {
+          itemOffset = 1
+          const videoItem = document.createElement('div')
+          videoItem.className = 'lb-scroll-item lb-scroll-video'
+          videoItem.dataset.index = 0
+          videoItem.innerHTML = `<div class="lb-yt-wrap"><iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe></div>`
+          scroll.appendChild(videoItem)
+        }
+
         urls.forEach((url, i) => {
           const item = document.createElement('div')
           item.className = 'lb-scroll-item'
-          item.dataset.index = i
+          item.dataset.index = i + itemOffset
           const img = document.createElement('img')
           img.alt = `${title} — ảnh ${i + 1}`
           img.onload = () => { img.classList.add('lb-loaded'); item.classList.add('lb-item-loaded') }
           img.onerror = () => { img.classList.add('lb-loaded'); item.classList.add('lb-item-loaded') }
-          // First visible image loads immediately, rest lazy
-          if (i === idx) { img.src = url } else { img.dataset.src = url }
+          if (i === 0 && !videoId) { img.src = url } else { img.dataset.src = url }
           item.appendChild(img)
           scroll.appendChild(item)
-          if (i !== idx) this._lazyObs.observe(item)
+          this._lazyObs.observe(item)
         })
 
         // Show lightbox with fade-in
@@ -3115,7 +3128,7 @@
         document.getElementById('lb-close').focus()
         audioMgr.play('audio-lb')
 
-        this._setupCounter(scroll, urls.length)
+        this._setupCounter(scroll, urls.length + itemOffset)
         this._updateArrows()
 
         if (idx > 0) {
@@ -3196,7 +3209,9 @@
         lb_el.classList.remove('lb-open')
         setTimeout(() => lb_el.setAttribute('hidden', ''), 220)
         document.body.style.overflow = ''
-        document.getElementById('lb-scroll').innerHTML = ''
+        const sc = document.getElementById('lb-scroll')
+        sc.querySelectorAll('iframe').forEach(f => { f.src = '' })
+        sc.innerHTML = ''
         document.getElementById('lb-projects').setAttribute('hidden', '')
         document.getElementById('lb-zoom-overlay').setAttribute('hidden', '')
         audioMgr.stop()
